@@ -82,7 +82,7 @@ process.load('Configuration.StandardSequences.Services_cff')
 
 process.GlobalTag.globaltag = globalTag
 print "Global Tag is ", process.GlobalTag.globaltag
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -102,7 +102,8 @@ process.source = cms.Source("PoolSource",
 #process.source.fileNames.append( path )
 #process.source.fileNames.append( "file:03Feb2017data.root" )
 #process.source.fileNames.append( "file:TW_80_miniAOD.root" )
-process.source.fileNames.append( "file:2017data.root" )
+#process.source.fileNames.append( "file:2017data.root" )
+process.source.fileNames.append( "file:/afs/cern.ch/user/w/wenxing/public/RunB2017__numEvent10000.root" )
 ###
 filename_out = "outfile.root"
 if options.DataFormat == "mc" and not options.grid:
