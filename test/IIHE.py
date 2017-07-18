@@ -125,8 +125,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(filenam
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 dataFormat = DataFormat.MiniAOD
 switchOnVIDElectronIdProducer(process, dataFormat)
-my_id_modules = [#"RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff"]
-#,
+my_id_modules = ["RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff",
                  "RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff"]
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
@@ -225,15 +224,15 @@ process.IIHEAnalysis.particleLevelMETCollection                = cms.InputTag("p
 
 
 
-#process.IIHEAnalysis.includeLeptonsAcceptModule  = cms.untracked.bool(True)
-#process.IIHEAnalysis.includeTriggerModule        = cms.untracked.bool(True)
-#process.IIHEAnalysis.includeEventModule          = cms.untracked.bool(True)
+process.IIHEAnalysis.includeLeptonsAcceptModule  = cms.untracked.bool(True)
+process.IIHEAnalysis.includeTriggerModule        = cms.untracked.bool(True)
+process.IIHEAnalysis.includeEventModule          = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeVertexModule         = cms.untracked.bool(True)
 process.IIHEAnalysis.includeElectronModule       = cms.untracked.bool(True)
-#process.IIHEAnalysis.includeMuonModule           = cms.untracked.bool(True)
+process.IIHEAnalysis.includeMuonModule           = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeMETModule            = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeJetModule            = cms.untracked.bool(True)
-#process.IIHEAnalysis.includeTauModule            = cms.untracked.bool(True)
+process.IIHEAnalysis.includeTauModule            = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeMCTruthModule        = cms.untracked.bool("mc" in options.DataProcessing)
 #process.IIHEAnalysis.includeLHEWeightModule        = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeDataModule            = cms.untracked.bool("data" in options.DataProcessing)
