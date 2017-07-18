@@ -90,7 +90,6 @@ bool IIHEModuleTrigger::addHLTrigger(HLTrigger* hlt){
      || hlt->nSubstringInString(hlt->name(), "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v" )) {
     hlt->saveFilters();
   }
-  hlt->savePrescale();
   HLTriggers_.push_back(hlt) ;
   return true ;
 }
