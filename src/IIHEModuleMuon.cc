@@ -203,7 +203,6 @@ IIHEModuleMuon::IIHEModuleMuon(const edm::ParameterSet& iConfig, edm::ConsumesCo
   muonCollectionLabel_         = iConfig.getParameter<edm::InputTag>("muonCollection"          ) ;
   muonCollectionToken_ =  iC.consumes<View<pat::Muon> > (muonCollectionLabel_);
   isMC_ = iConfig.getUntrackedParameter<bool>("isMC") ;
-  rc_  = new RoccoR("rcdata.2016.v3");
 }
 IIHEModuleMuon::~IIHEModuleMuon(){}
 
@@ -307,7 +306,6 @@ void IIHEModuleMuon::beginJob(){
   addBranch("mu_mc_index" , kVectorInt  ) ;
   addBranch("mu_mc_ERatio", kVectorFloat) ;
   }
-  addBranch("mu_rochester_sf", kVectorFloat) ;
 }
 
 // ------------ method called to for each event  ------------
@@ -507,8 +505,6 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     store("mu_pfIsoDbCorrected04" , (muIt->pfIsolationR04().sumChargedHadronPt + max(0., muIt->pfIsolationR04().sumNeutralHadronEt + muIt->pfIsolationR04().sumPhotonEt - 0.5*muIt->pfIsolationR04().sumPUPt))/muIt->pt()         ) ;
     store("mu_isoTrackerBased03"  , muIt->isolationR03().sumPt/muIt->pt()          ) ;
 
-    double rocsf =1;
-
     if (isMC_){ 
     // Now apply truth matching.
       int index = MCTruth_matchEtaPhi_getIndex(muIt->eta(), muIt->phi()) ;
@@ -517,12 +513,6 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
         store("mu_mc_bestDR", deltaR(muIt->eta(), muIt->phi(), MCTruth->eta(), MCTruth->phi())) ;
         store("mu_mc_index" , index) ;
         store("mu_mc_ERatio", muIt->energy()/MCTruth->energy()) ;
-
-        if(isTrackerMuon && isGlobalMuon){       
-          if (deltaR(muIt->eta(), muIt->phi(), MCTruth->eta(), MCTruth->phi()) < 0.1) 
-          rocsf = rc_->kScaleFromGenMC(muIt->globalTrack()->charge(), muIt->globalTrack()->pt(), muIt->globalTrack()->eta(), muIt->globalTrack()->phi(), muIt->innerTrack()->hitPattern().trackerLayersWithMeasurement(), MCTruth->pt(), gRandom->Rndm(), 0, 0);
-          else rocsf = rc_->kScaleAndSmearMC(muIt->globalTrack()->charge(), muIt->globalTrack()->pt(), muIt->globalTrack()->eta(), muIt->globalTrack()->phi(), muIt->innerTrack()->hitPattern().trackerLayersWithMeasurement(), gRandom->Rndm(), gRandom->Rndm(), 0, 0);
-        }
       } 
       if(index<=0){
         store("mu_mc_bestDR", 999.0) ;
@@ -530,9 +520,6 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
         store("mu_mc_ERatio", 999.0) ;
       }
     }
-    else if(!isMC_ && isTrackerMuon && isGlobalMuon) rocsf = rc_->kScaleDT(muIt->globalTrack()->charge(), muIt->globalTrack()->pt(), muIt->globalTrack()->eta(), muIt->globalTrack()->phi(), 0, 0);  
-
-    store("mu_rochester_sf", rocsf) ;  
   }
 }
 
