@@ -82,7 +82,7 @@ process.load('Configuration.StandardSequences.Services_cff')
 
 process.GlobalTag.globaltag = globalTag
 print "Global Tag is ", process.GlobalTag.globaltag
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -239,7 +239,7 @@ process.IIHEAnalysis.includeTauModule            = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeDataModule            = cms.untracked.bool("data" in options.DataProcessing)
 
 
-process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked.bool(True)
+#process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked.bool(True)
 ##########################################################################################
 #                            Woohoo!  We"re ready to start!                              #
 ##########################################################################################

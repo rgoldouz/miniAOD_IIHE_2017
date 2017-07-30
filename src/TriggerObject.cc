@@ -22,10 +22,10 @@ int TriggerFilter::setValues(const edm::Event& iEvent, edm::Handle<pat::TriggerO
   const edm::TriggerNames &names = iEvent.triggerNames(*triggerBits);
   for (pat::TriggerObjectStandAlone obj : *trigEvent) {
     obj.unpackPathNames(names);
-    obj.unpackNamesAndLabels (iEvent, *triggerBits);
+    obj.unpackFilterLabels (iEvent, *triggerBits);
     // loop over filters
     for (size_t iF = 0; iF < obj.filterLabels().size(); ++iF) {
-      string label = obj.filterLabels()[iF]; 
+      string label = obj.filterLabels()[iF];
       if (name_==label){
         analysis->store(etaBranchName_, obj.eta()) ;
         analysis->store(phiBranchName_, obj.phi()) ;
