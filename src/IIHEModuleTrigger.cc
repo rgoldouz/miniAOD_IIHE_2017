@@ -74,7 +74,10 @@ bool IIHEModuleTrigger::addHLTrigger(HLTrigger* hlt){
       return false ;
     }
   }
-  if( hlt->nSubstringInString(hlt->name(), "Ele27_eta2p1_WPTight_Gsf_v") 
+  if( hlt->isOnlySingleElectron()
+     ||  hlt->isOnlyDoubleElectron()
+
+/* hlt->nSubstringInString(hlt->name(), "Ele27_eta2p1_WPTight_Gsf_v") 
      || hlt->nSubstringInString(hlt->name(), "DoubleEle33_CaloIdL_MW_v") 
      || hlt->nSubstringInString(hlt->name(), "DoubleEle33_CaloIdL_GsfTrkIdVL_v" ) 
      || hlt->nSubstringInString(hlt->name(), "Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v" ) 
@@ -88,7 +91,7 @@ bool IIHEModuleTrigger::addHLTrigger(HLTrigger* hlt){
      || hlt->nSubstringInString(hlt->name(), "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v" )
      || hlt->nSubstringInString(hlt->name(), "Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v" )
      || hlt->nSubstringInString(hlt->name(), "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v" )
-) {
+*/) {
     hlt->saveFilters();
   }
 //  hlt->savePrescale();

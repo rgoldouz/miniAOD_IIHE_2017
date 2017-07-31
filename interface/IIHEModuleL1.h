@@ -10,7 +10,7 @@
 #include "CondFormats/L1TObjects/interface/L1TUtmTriggerMenu.h"
 #include "CondFormats/DataRecord/interface/L1TUtmTriggerMenuRcd.h"
 #include "CondFormats/L1TObjects/interface/L1TGlobalParameters.h"
-
+#include "DataFormats/L1Trigger/interface/L1EmParticle.h"
 // class decleration
 class IIHEModuleL1 : public IIHEModule {
  public:

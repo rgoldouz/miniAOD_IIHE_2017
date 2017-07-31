@@ -13,7 +13,6 @@ IIHEModuleL1::IIHEModuleL1(const edm::ParameterSet& iConfig, edm::ConsumesCollec
 }
 IIHEModuleL1::~IIHEModuleL1(){}
 
-// ------------ method called once each job just before starting event loop  ------------
 void IIHEModuleL1::beginJob(){
 
   setBranchType(kVectorInt);
@@ -23,7 +22,6 @@ void IIHEModuleL1::beginJob(){
   addBranch("L1_Iso");
 }
 
-// ------------ method called to for each event  ------------
 void IIHEModuleL1::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   edm::Handle<BXVector<l1t::EGamma>> egammas;
@@ -43,8 +41,10 @@ void IIHEModuleL1::beginEvent(){}
 void IIHEModuleL1::endEvent(){}
 
 
-// ------------ method called once each job just after ending the event loop  ------------
 void IIHEModuleL1::endJob(){
 }
 
 DEFINE_FWK_MODULE(IIHEModuleL1);
+
+
+
