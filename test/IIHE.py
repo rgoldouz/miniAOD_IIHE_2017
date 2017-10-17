@@ -29,7 +29,7 @@ options.register("file",
                  opts.VarParsing.varType.string,
                  "file to analyze")
 options.register("DataProcessing",
-                 "mc2016",
+                 "mc2017",
                  opts.VarParsing.multiplicity.singleton,
                  opts.VarParsing.varType.string,
                  "Data processing types. Options are:mc2016,rerecodata,promptdata")
@@ -59,12 +59,8 @@ options.parseArguments()
 #                                      Global tags                                       #
 ##########################################################################################
 globalTag = "80"
-if options.DataProcessing == "mc2016":
+if options.DataProcessing == "mc2017":
   globalTag = "80X_mcRun2_asymptotic_2016_TrancheIV_v8"
-if options.DataProcessing == "rerecodata":
-  globalTag = "80X_dataRun2_2016SeptRepro_v7"
-if options.DataProcessing == "promptdata":
-  globalTag = "80X_dataRun2_Prompt_v16"
 if options.DataProcessing == "data2017":
   globalTag = "92X_dataRun2_Jun23ReReco_PixelCommissioning"
 ##########################################################################################
@@ -82,7 +78,7 @@ process.load('Configuration.StandardSequences.Services_cff')
 
 process.GlobalTag.globaltag = globalTag
 print "Global Tag is ", process.GlobalTag.globaltag
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -228,15 +224,15 @@ process.IIHEAnalysis.particleLevelMETCollection                = cms.InputTag("p
 process.IIHEAnalysis.includeLeptonsAcceptModule  = cms.untracked.bool(True)
 process.IIHEAnalysis.includeTriggerModule        = cms.untracked.bool(True)
 process.IIHEAnalysis.includeEventModule          = cms.untracked.bool(True)
-#process.IIHEAnalysis.includeVertexModule         = cms.untracked.bool(True)
+process.IIHEAnalysis.includeVertexModule         = cms.untracked.bool(True)
 process.IIHEAnalysis.includeElectronModule       = cms.untracked.bool(True)
 process.IIHEAnalysis.includeMuonModule           = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeMETModule            = cms.untracked.bool(True)
 #process.IIHEAnalysis.includeJetModule            = cms.untracked.bool(True)
 process.IIHEAnalysis.includeTauModule            = cms.untracked.bool(True)
 process.IIHEAnalysis.includeL1Module            = cms.untracked.bool(True)
-#process.IIHEAnalysis.includeMCTruthModule        = cms.untracked.bool("mc" in options.DataProcessing)
-#process.IIHEAnalysis.includeLHEWeightModule        = cms.untracked.bool(True)
+process.IIHEAnalysis.includeMCTruthModule        = cms.untracked.bool("mc" in options.DataProcessing)
+process.IIHEAnalysis.includeLHEWeightModule        = cms.untracked.bool("mc" in options.DataProcessing)
 #process.IIHEAnalysis.includeDataModule            = cms.untracked.bool("data" in options.DataProcessing)
 
 
