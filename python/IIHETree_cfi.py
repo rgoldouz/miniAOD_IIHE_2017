@@ -5,7 +5,7 @@ IIHEAnalysis = cms.EDAnalyzer("IIHEAnalysis",
     # Collections for DATA and MC.
     triggerResultsCollectionHLT                 = cms.InputTag("TriggerResults"        , ""                          ,"HLT" ),
     triggerResultsCollectionPAT                 = cms.InputTag("TriggerResults"        , ""                          ,"RECO"),
-    triggerObjectStandAloneCollection           = cms.InputTag("slimmedPatTrigger"     , ""                          ,"RECO"),
+    triggerObjectStandAloneCollection           = cms.InputTag("slimmedPatTrigger" ),
     patTriggerCollection                        = cms.InputTag("patTrigger"                                                 ),
     triggerEvent                                = cms.InputTag("hltTriggerSummaryAOD"  , ""                          ,"PAT" ),
     photonCollection                            = cms.InputTag("slimmedPhotons"                                             ),

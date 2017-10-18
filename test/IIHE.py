@@ -60,7 +60,7 @@ options.parseArguments()
 ##########################################################################################
 globalTag = "80"
 if options.DataProcessing == "mc2017":
-  globalTag = "80X_mcRun2_asymptotic_2016_TrancheIV_v8"
+  globalTag = "92X_upgrade2017_realistic_v10"
 if options.DataProcessing == "data2017":
   globalTag = "92X_dataRun2_Jun23ReReco_PixelCommissioning"
 ##########################################################################################
@@ -99,7 +99,7 @@ process.source = cms.Source("PoolSource",
 #process.source.fileNames.append( "file:03Feb2017data.root" )
 #process.source.fileNames.append( "file:TW_80_miniAOD.root" )
 #process.source.fileNames.append( "file:2017data.root" )
-process.source.fileNames.append( "file:/afs/cern.ch/user/w/wenxing/public/RunB2017__numEvent10000.root" )
+process.source.fileNames.append( "file:0C47901E-B8AC-E711-B06F-0025905A48BC.root" )
 ###
 filename_out = "outfile.root"
 if options.DataFormat == "mc" and not options.grid:

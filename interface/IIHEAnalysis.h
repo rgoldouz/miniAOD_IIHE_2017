@@ -94,7 +94,8 @@ public:
   void listBranches() ;
   
   bool addValueToMetaTree(std::string, float) ;
-  bool addFVValueToMetaTree(std::string, std::vector<float>) ; 
+  bool addFVValueToMetaTree(std::string, std::vector<float>) ;
+  bool addCVValueToMetaTree(std::string, std::vector<std::string>) ; 
   // MC truth
   void addToMCTruthWhitelist(std::vector<int>) ;
   std::vector<int> getMCTruthWhitelist(){ return MCTruthWhitelist_ ; }

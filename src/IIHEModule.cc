@@ -39,6 +39,14 @@ bool IIHEModule::addValueToMetaTree(std::string name, float value){
   return parent_->addValueToMetaTree(name, value) ;
 }
 
+bool IIHEModule::addFVValueToMetaTree(std::string parName, std::vector<float> value){
+  return parent_->addFVValueToMetaTree(parName, value) ;
+}
+
+bool IIHEModule::addCVValueToMetaTree(std::string parName, std::vector<std::string> value){
+  return parent_->addCVValueToMetaTree(parName, value) ;
+}
+
 const MCTruthObject* IIHEModule::MCTruth_matchEtaPhi(float eta, float phi){
   return parent_->MCTruth_matchEtaPhi(eta, phi) ;
 }

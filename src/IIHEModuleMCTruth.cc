@@ -45,7 +45,7 @@ void IIHEModuleMCTruth::beginJob(){
   MCPdgIdsToSave.push_back(33) ; // Z'' boson
   MCPdgIdsToSave.push_back(34) ; // W'  boson
   addToMCTruthWhitelist(MCPdgIdsToSave) ;
-
+/*
   setBranchType(kVectorFloat) ;
   addBranch("LHE_Pt");
   addBranch("LHE_Eta");
@@ -54,7 +54,7 @@ void IIHEModuleMCTruth::beginJob(){
   setBranchType(kVectorInt) ;
   addBranch("LHE_pdgid");
   addBranch("LHE_status");
-
+*/
   addBranch("mc_n", kUInt) ;
   addBranch("mc_weight", kFloat) ;
   addBranch("mc_w_sign", kFloat) ;
@@ -126,7 +126,7 @@ void IIHEModuleMCTruth::analyze(const edm::Event& iEvent, const edm::EventSetup&
       store("genjet_energy", genJets->at(j).energy()) ;
     }
 
-
+/*
   edm::Handle<LHEEventProduct> lhe_handle;
   iEvent.getByToken(lheEventLabel_, lhe_handle);
   if (lhe_handle.isValid()){
@@ -142,6 +142,7 @@ void IIHEModuleMCTruth::analyze(const edm::Event& iEvent, const edm::EventSetup&
       store("LHE_status",lhe_handle->hepeup().ISTUP[i]);
     }
   }
+*/
 
   edm::Handle<GenEventInfoProduct> genEventInfoHandle;
   iEvent.getByToken(generatorLabel_, genEventInfoHandle);
