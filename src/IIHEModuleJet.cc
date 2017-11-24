@@ -15,20 +15,9 @@ using namespace edm ;
 IIHEModuleJet::IIHEModuleJet(const edm::ParameterSet& iConfig, edm::ConsumesCollector && iC):IIHEModule(iConfig){
   pfJetLabel_                  =  iConfig.getParameter<edm::InputTag>("JetCollection");
   pfJetToken_                  =  iC.consumes<View<pat::Jet> > (pfJetLabel_);
-  pfJetLabelSmeared_           =  iConfig.getParameter<edm::InputTag>("JetCollectionSmeared");
-  pfJetTokenSmeared_           =  iC.consumes<View<pat::Jet> > (pfJetLabelSmeared_);
-  pfJetLabelEnUp_              =  iConfig.getParameter<edm::InputTag>("JetCollectionEnUp");
-  pfJetTokenEnUp_              =  iC.consumes<View<pat::Jet> > (pfJetLabelEnUp_);
-  pfJetLabelEnDown_            =  iConfig.getParameter<edm::InputTag>("JetCollectionEnDown");
-  pfJetTokenEnDown_            =  iC.consumes<View<pat::Jet> > (pfJetLabelEnDown_);
-  pfJetLabelSmearedJetResUp_   =  iConfig.getParameter<edm::InputTag>("JetCollectionSmearedJetResUp");
-  pfJetTokenSmearedJetResUp_   =  iC.consumes<View<pat::Jet> > (pfJetLabelSmearedJetResUp_);
-  pfJetLabelSmearedJetResDown_ =  iConfig.getParameter<edm::InputTag>("JetCollectionSmearedJetResDown");
-  pfJetTokenSmearedJetResDown_ =  iC.consumes<View<pat::Jet> > (pfJetLabelSmearedJetResDown_);
 
   ETThreshold_ = iConfig.getUntrackedParameter<double>("jetPtThreshold") ;
   isMC_ = iConfig.getUntrackedParameter<bool>("isMC") ;
-  btw = new BTagWeighter("tt");
 
 }
 IIHEModuleJet::~IIHEModuleJet(){}
@@ -62,6 +51,7 @@ void IIHEModuleJet::beginJob(){
   addBranch("jet_CSVv2");
   addBranch("jet_CvsL");
   addBranch("jet_CvsB");
+  addBranch("jet_MVA2BJets");
   setBranchType(kVectorBool);
   addBranch("jet_isJetIDLoose");
   addBranch("jet_isJetIDTight");
@@ -109,27 +99,9 @@ void IIHEModuleJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   edm::Handle<edm::View<pat::Jet> > pfJetHandle_;
   iEvent.getByToken(pfJetToken_, pfJetHandle_);
 
-  edm::Handle<edm::View<pat::Jet> > pfJetHandleSmeared_;
-  iEvent.getByToken(pfJetTokenSmeared_, pfJetHandleSmeared_);
-
-  edm::Handle<edm::View<pat::Jet> > pfJetHandleEnUp_;
-  iEvent.getByToken(pfJetTokenEnUp_, pfJetHandleEnUp_);
-
-  edm::Handle<edm::View<pat::Jet> > pfJetHandleEnDown_;
-  iEvent.getByToken(pfJetTokenEnDown_, pfJetHandleEnDown_);
-
-  edm::Handle<edm::View<pat::Jet> > pfJetHandleSmearedJetResUp_;
-  iEvent.getByToken(pfJetTokenSmearedJetResUp_, pfJetHandleSmearedJetResUp_);
-
-  edm::Handle<edm::View<pat::Jet> > pfJetHandleSmearedJetResDown_;
-  iEvent.getByToken(pfJetTokenSmearedJetResDown_, pfJetHandleSmearedJetResDown_);
-
   const string ctr = "central";
   const string vup = "up";
   const string vdown = "down";
-  const auto op_loose = BTagEntry::OP_LOOSE;
-  const auto op_med = BTagEntry::OP_MEDIUM;
-  const auto op_tight = BTagEntry::OP_TIGHT;
 
   store("jet_n", (unsigned int) pfJetHandle_ -> size() );
   for ( unsigned int i = 0; i <pfJetHandle_->size(); ++i) {
@@ -159,7 +131,7 @@ void IIHEModuleJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     store("jet_CSVv2",pfjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
     store("jet_CvsL",pfjet->bDiscriminator("pfCombinedCvsLJetTags"));
     store("jet_CvsB",pfjet->bDiscriminator("pfCombinedCvsBJetTags"));
-
+    store("jet_MVA2BJets", pfjet->bDiscriminator("pfCombinedMVAV2BJetTags"));
     float eta = pfjet->eta();
     float NHF = pfjet->neutralHadronEnergyFraction();
     float NEMF = pfjet->neutralEmEnergyFraction();
@@ -193,36 +165,9 @@ void IIHEModuleJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     store("jet_isJetIDTight"                 ,isJetIDTight);
     store("jet_isJetIDTightLepVeto"          ,isJetIDTightLepVeto);
     if (isMC_){
-      store("jet_Smeared_pt",pfJetHandleSmeared_->at(i).pt());
-      store("jet_Smeared_energy",pfJetHandleSmeared_->at(i).energy());
-      store("jet_SmearedJetResUp_pt",pfJetHandleSmearedJetResUp_->at(i).pt());
-      store("jet_SmearedJetResUp_energy",pfJetHandleSmearedJetResUp_->at(i).energy());
-      store("jet_SmearedJetResDown_pt",pfJetHandleSmearedJetResDown_->at(i).pt());
-      store("jet_SmearedJetResDown_energy",pfJetHandleSmearedJetResDown_->at(i).energy());
-      store("jet_EnUp_pt",pfJetHandleEnUp_->at(i).pt());
-      store("jet_EnUp_energy",pfJetHandleEnUp_->at(i).energy());
-      store("jet_EnDown_pt",pfJetHandleEnDown_->at(i).pt());
-      store("jet_EnDown_energy",pfJetHandleEnDown_->at(i).energy());
 
 //JetBTagWeight( edm::View<pat::Jet>&b, size_t ijet, const vector<BTagEntry::OperatingPoinconst string &bc_full_syst, const string &udsg_full_syst,const string &bc_full_syst, const string &udsg_full_syst,const string &bc_fast_syst, const string &udsg_fast_syst,bool do_deep_csv, bool do_by_proc, Runs runs)
 
-      store("jet_BtagSF_loose"         ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_loose, ctr  , ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFbcUp_loose"     ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_loose, vup  , ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFbcDown_loose"   ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_loose, vdown, ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFudsgUp_loose"   ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_loose, ctr  , vup  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFudsgDown_loose" ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_loose, ctr  , vdown, ctr, ctr, false, false, BTagWeighter::Runs::all));
-
-      store("jet_BtagSF_medium"        ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_med  , ctr  , ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFbcUp_medium"    ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_med  , vup  , ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFbcDown_medium"  ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_med  , vdown, ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFudsgUp_medium"  ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_med  , ctr  , vup  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFudsgDown_medium",btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_med  , ctr  , vdown, ctr, ctr, false, false, BTagWeighter::Runs::all));
-
-      store("jet_BtagSF_tight"         ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_tight, ctr  , ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFbcUp_tight"     ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_tight, vup  , ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFbcDown_tight"   ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_tight, vdown, ctr  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFudsgUp_tight"   ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_tight, ctr  , vup  ,  ctr, ctr, false, false, BTagWeighter::Runs::all));
-      store("jet_BtagSFudsgDown_tight" ,btw->JetBTagWeight(pfJetHandleSmeared_->at(i), op_tight, ctr  , vdown, ctr, ctr, false, false, BTagWeighter::Runs::all));
 
    }
 

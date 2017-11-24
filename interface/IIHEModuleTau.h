@@ -26,6 +26,10 @@ class IIHEModuleTau : public IIHEModule {
  private:
   edm::EDGetTokenT<edm::View<pat::Tau> > tauCollectionToken_;
   edm::InputTag                          tauCollectionLabel_ ;
+  edm::Handle<View<reco::Vertex>> pvCollection_ ;
+  edm::EDGetTokenT<View<reco::Vertex>> vtxToken_;
+  edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_ ;
+  edm::InputTag           primaryVertexLabel_ ;
   float ETThreshold_ ;
 };
 #endif
