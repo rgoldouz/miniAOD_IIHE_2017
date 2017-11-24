@@ -33,6 +33,9 @@ IIHEModuleTrigger::IIHEModuleTrigger(const edm::ParameterSet& iConfig, edm::Cons
 
   triggerResultsLabel_                      = iConfig.getParameter<edm::InputTag>("triggerResultsCollectionPAT") ;
   triggerResultsToken_                      = iC.consumes<edm::TriggerResults>(triggerResultsLabel_);
+
+  triggerResultsLabelRECO_                      = iConfig.getParameter<edm::InputTag>("triggerResultsCollectionRECO") ;
+  triggerResultsTokenRECO_                      = iC.consumes<edm::TriggerResults>(triggerResultsLabelRECO_);
   
   std::string triggersIn = iConfig.getUntrackedParameter<std::string>("triggers") ;
   triggerNamesFromPSet_ = splitString(triggersIn, ",") ;
@@ -74,24 +77,11 @@ bool IIHEModuleTrigger::addHLTrigger(HLTrigger* hlt){
       return false ;
     }
   }
-  if( hlt->isOnlySingleElectron()
-     ||  hlt->isOnlyDoubleElectron()
-
-/* hlt->nSubstringInString(hlt->name(), "Ele27_eta2p1_WPTight_Gsf_v") 
+  if(   hlt->nSubstringInString(hlt->name(), "Ele35_WPTight") 
      || hlt->nSubstringInString(hlt->name(), "DoubleEle33_CaloIdL_MW_v") 
-     || hlt->nSubstringInString(hlt->name(), "DoubleEle33_CaloIdL_GsfTrkIdVL_v" ) 
-     || hlt->nSubstringInString(hlt->name(), "Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v" ) 
-     || hlt->nSubstringInString(hlt->name(), "Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v") 
-     || hlt->nSubstringInString(hlt->name(), "Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v")  
-     || hlt->nSubstringInString(hlt->name(), "Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v")  
-     || hlt->nSubstringInString(hlt->name(), "Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v")  
-     || hlt->nSubstringInString(hlt->name(), "Iso_TkMu24_v" ) 
-     || hlt->nSubstringInString(hlt->name(), "Iso_Mu24_v" )
-     || hlt->nSubstringInString(hlt->name(), "Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v" )
-     || hlt->nSubstringInString(hlt->name(), "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v" )
-     || hlt->nSubstringInString(hlt->name(), "Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v" )
-     || hlt->nSubstringInString(hlt->name(), "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v" )
-*/) {
+     || hlt->nSubstringInString(hlt->name(), "DoubleEle25_CaloIdL_MW_v")
+     || hlt->nSubstringInString(hlt->name(), "Ele23_Ele12" ) 
+  ) {
     hlt->saveFilters();
   }
 //  hlt->savePrescale();
@@ -131,6 +121,9 @@ void IIHEModuleTrigger::analyze(const edm::Event& iEvent, const edm::EventSetup&
   edm::Handle<TriggerResults> triggerResultsCollection_ ;
   iEvent.getByToken(triggerResultsToken_, triggerResultsCollection_);
 
+  edm::Handle<TriggerResults> triggerResultsCollectionRECO_ ;
+  iEvent.getByToken(triggerResultsTokenRECO_, triggerResultsCollectionRECO_);
+
   // Now fill the values
   IIHEAnalysis* analysis = parent_ ;
   for(unsigned int i=0 ; i<HLTriggersPAT_.size() ; i++){
@@ -138,6 +131,12 @@ void IIHEModuleTrigger::analyze(const edm::Event& iEvent, const edm::EventSetup&
     hlt->status(triggerResultsCollection_) ;
     hlt->store(analysis) ;
   } 
+
+  for(unsigned int i=0 ; i<HLTriggersRECO_.size() ; i++){
+    HLTrigger* hlt = HLTriggersRECO_.at(i) ;
+    hlt->status(triggerResultsCollectionRECO_) ;
+    hlt->store(analysis) ;
+  }
 
   for(unsigned int i=0 ; i<HLTriggers_.size() ; i++){
     HLTrigger* hlt = HLTriggers_.at(i) ;
@@ -158,6 +157,16 @@ void IIHEModuleTrigger::beginRun(edm::Run const& iRun, edm::EventSetup const& iS
       HLTriggersPAT_.push_back(hltPAT) ;
       hltPAT->createBranches(analysis) ;
     }
+
+    hltConfigRECO_.init(iRun, iSetup, triggerResultsLabelRECO_.process(), changed_);
+    HLTNamesFromConfigRECO_ = hltConfigRECO_.triggerNames() ;
+    for(unsigned int i=0 ; i<HLTNamesFromConfigRECO_.size() ; ++i){
+      std::string nameRECO = HLTNamesFromConfigRECO_.at(i) ;
+      HLTrigger* hltRECO = new HLTrigger(nameRECO, hltConfigRECO_) ;
+      HLTriggersRECO_.push_back(hltRECO) ;
+      hltRECO->createBranches(analysis) ;
+    }
+
   parent_->configureBranches() ;
   changed_ = false ;
   }

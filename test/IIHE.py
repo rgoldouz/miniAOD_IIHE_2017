@@ -152,17 +152,6 @@ for idmod in my_id_modules:
 #    cut = cms.string("pt>5 && abs(eta)")
 #)
 
-# Bad Charged Hadron and Bad Muon Filters from MiniAOD
-#process.load('RecoMET.METFilters.metFilters_cff')
-#process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
-#process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
-#process.BadPFMuonFilter.PFCandidates = cms.InputTag("packedPFCandidates")
-
-#process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
-#process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
-#process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
-
-
 #For fiducial study we need object at particle level
 #process.load("UserCode.IIHETree.IIHEFiducialModules_cff")
 
@@ -282,13 +271,7 @@ if fiducialStudy:
         )
 else:
     process.p1 = cms.Path(
-#        process.regressionApplication     *
-#        process.calibratedPatElectrons   *
         process.egmGsfElectronIDSequence * 
-#        process.heepIDVarValueMaps        *
-#        process.BadPFMuonFilter           *
-#        process.BadChargedCandidateFilter *
-#        process.fullPatMetSequence        * 
         process.IIHEAnalysis
         )
 
