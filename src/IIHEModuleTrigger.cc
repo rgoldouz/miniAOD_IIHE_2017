@@ -211,6 +211,7 @@ void IIHEModuleTrigger::beginRun(edm::Run const& iRun, edm::EventSetup const& iS
         }
         
         if(addThisTrigger==false) continue ;
+        hlt->savePrescale();
         addHLTrigger(hlt) ;
       }
       

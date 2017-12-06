@@ -78,7 +78,7 @@ process.load('Configuration.StandardSequences.Services_cff')
 
 process.GlobalTag.globaltag = globalTag
 print "Global Tag is ", process.GlobalTag.globaltag
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
 process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
@@ -98,8 +98,8 @@ process.source = cms.Source("PoolSource",
 #process.source.fileNames.append( path )
 #process.source.fileNames.append( "file:03Feb2017data.root" )
 #process.source.fileNames.append( "file:TW_80_miniAOD.root" )
-#process.source.fileNames.append( "file:2017data.root" )
-process.source.fileNames.append( "file:0C47901E-B8AC-E711-B06F-0025905A48BC.root" )
+process.source.fileNames.append( "file:2017data.root" )
+#process.source.fileNames.append( "file:0C47901E-B8AC-E711-B06F-0025905A48BC.root" )
 ###
 filename_out = "outfile.root"
 if options.DataFormat == "mc" and not options.grid:
@@ -126,34 +126,6 @@ my_id_modules = ["RecoEgamma.ElectronIdentification.Identification.cutBasedElect
                  "RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff"]
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
-#MET corrections and uncertainties
-#from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
-#runMetCorAndUncFromMiniAOD(process,
-#                           isData= "data" in options.DataProcessing
-#                           )
-#electron 80 energy regression
-#from EgammaAnalysis.ElectronTools.regressionWeights_cfi import regressionWeights
-#process = regressionWeights(process)
-#process.load("EgammaAnalysis.ElectronTools.regressionApplication_cff")
-
-#Electron energy scale and smearing
-#process.load("Configuration.StandardSequences.Services_cff")
-#process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
-#                                                    calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
-#                                                    engineName = cms.untracked.string("TRandom3")),
-#                                                  )
-#process.load("EgammaAnalysis.ElectronTools.calibratedPatElectronsRun2_cfi")
-#process.calibratedPatElectrons.isMC = cms.bool("mc" in options.DataProcessing)
-#process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons80","","IIHEAnalysis")
-#process.calibratedPatElectrons.isSynchronization = cms.bool(False)
-## Compatibility with VID 
-#process.selectedElectrons80 = cms.EDFilter("PATElectronSelector",
-#    src = cms.InputTag("calibratedPatElectrons","","IIHEAnalysis"),
-#    cut = cms.string("pt>5 && abs(eta)")
-#)
-
-#For fiducial study we need object at particle level
-#process.load("UserCode.IIHETree.IIHEFiducialModules_cff")
 
 ##########################################################################################
 #                            MY analysis input!                              #
@@ -162,7 +134,6 @@ process.load("UserCode.IIHETree.IIHETree_cfi")
 process.IIHEAnalysis.globalTag = cms.string(globalTag)
 process.IIHEAnalysis.isData  = cms.untracked.bool("data" in options.DataProcessing)
 process.IIHEAnalysis.isMC    = cms.untracked.bool("mc" in options.DataProcessing)
-#process.IIHEAnalysis.isMC    = cms.untracked.bool(False)
 #****Collections added before the analysis
 # VID output
 process.IIHEAnalysis.eleTrkPtIsoLabel                            = cms.InputTag("heepIDVarValueMaps"    ,"eleTrkPtIso"       ,"IIHEAnalysis" )
@@ -225,7 +196,7 @@ process.IIHEAnalysis.includeLHEWeightModule        = cms.untracked.bool("mc" in 
 #process.IIHEAnalysis.includeDataModule            = cms.untracked.bool("data" in options.DataProcessing)
 
 
-#process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked.bool(True)
+process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked.bool(True)
 ##########################################################################################
 #                            Woohoo!  We"re ready to start!                              #
 ##########################################################################################
@@ -234,46 +205,10 @@ process.IIHEAnalysis.includeLHEWeightModule        = cms.untracked.bool("mc" in 
 #    "PoolOutputModule",
 #    fileName = cms.untracked.string("EDM.root")
 #    )
-
-fiducialStudy = False
-
-if fiducialStudy:
-    process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
-    process.mergedGenParticles = cms.EDProducer("MergedGenParticleProducer",
-        inputPruned = cms.InputTag("prunedGenParticles"),
-        inputPacked = cms.InputTag("packedGenParticles"),
+process.p1 = cms.Path(
+    process.egmGsfElectronIDSequence * 
+    process.IIHEAnalysis
     )
-    process.load('GeneratorInterface.RivetInterface.genParticles2HepMC_cfi')
-    process.genParticles2HepMC.genParticles = cms.InputTag("mergedGenParticles")
-    process.genParticles2HepMC.genEventInfo = cms.InputTag("generator")
-    process.load("TopQuarkAnalysis.TopEventProducers.producers.pseudoTop_cfi")
-    process.pseudoTop.maxEta = cms.double(5.2)
-    process.pseudoTop.minJetPt = cms.double(20)
-    process.pseudoTop.maxJetEta = cms.double(5.2)
-
-    process.options = cms.untracked.PSet(
-        allowUnscheduled = cms.untracked.bool(True),
-        wantSummary      = cms.untracked.bool(True)
-    )
-
-    process.IIHEAnalysis.includeParticleLevelObjectsModule= cms.untracked.bool(True)
-    process.p1 = cms.Path(
-#        process.regressionApplication     *
-#        process.calibratedPatElectrons    *
-#        process.egmGsfElectronIDSequence  * 
-#        process.heepIDVarValueMaps        *
-#        process.BadPFMuonFilter           *
-#        process.BadChargedCandidateFilter *
-#        process.fullPatMetSequence        *
-#        process.FiducialSeq                *
-        process.pseudoTop *
-        process.IIHEAnalysis 
-        )
-else:
-    process.p1 = cms.Path(
-        process.egmGsfElectronIDSequence * 
-        process.IIHEAnalysis
-        )
 
 #process.outpath = cms.EndPath(process.out)
 
