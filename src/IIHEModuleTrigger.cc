@@ -80,7 +80,9 @@ bool IIHEModuleTrigger::addHLTrigger(HLTrigger* hlt){
   if(   hlt->nSubstringInString(hlt->name(), "Ele35_WPTight") 
      || hlt->nSubstringInString(hlt->name(), "DoubleEle33_CaloIdL_MW_v") 
      || hlt->nSubstringInString(hlt->name(), "DoubleEle25_CaloIdL_MW_v")
-     || hlt->nSubstringInString(hlt->name(), "Ele23_Ele12" ) 
+     || hlt->nSubstringInString(hlt->name(), "Ele23_Ele12" )
+     || hlt->nSubstringInString(hlt->name(), "Ele32_WPTight" )
+     || hlt->nSubstringInString(hlt->name(), "DiEle27_WPTightCaloOnly" ) 
   ) {
     hlt->saveFilters();
   }
