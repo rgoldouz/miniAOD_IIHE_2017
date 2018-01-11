@@ -380,7 +380,7 @@ MiniAODHelper::isGoodElectron(const pat::Electron& iElectron, const float iMinPt
   if( iElectron.gsfTrack().isAvailable() ){
     d02 = ( fabs(iElectron.gsfTrack()->dxy(vertex.position())) < 0.02 );
     d04 = ( fabs(iElectron.gsfTrack()->dxy(vertex.position())) < 0.04 );
-    //no_exp_inner_trkr_hits = ( iElectron.gsfTrack()->trackerExpectedHitsInner().numberOfHits() <= 0 ); // deprecated in 7_2_0 .. replace with ..?
+    //no_exp_inner_trkr_hits = ( iElectron.gsfTrack()->trackerExpectedHitsInner().numberOfAllHits() <= 0 ); // deprecated in 7_2_0 .. replace with ..?
     dZ = ( fabs(iElectron.gsfTrack()->dz(vertex.position())) < 1. );
   }
 
@@ -892,7 +892,7 @@ bool MiniAODHelper::PassElectron80XId(const pat::Electron& iElectron, const elec
   if( iElectron.gsfTrack().isAvailable() ){
     d0 = fabs(iElectron.gsfTrack()->dxy(vertex.position()));
     dZ = fabs(iElectron.gsfTrack()->dz(vertex.position()));
-    expectedMissingInnerHits = iElectron.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+    expectedMissingInnerHits = iElectron.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   }
 
   bool passConversionVeto = ( iElectron.passConversionVeto() );
@@ -1022,7 +1022,7 @@ bool MiniAODHelper::PassElectronPhys14Id(const pat::Electron& iElectron, const e
   if( iElectron.gsfTrack().isAvailable() ){
     d0 = fabs(iElectron.gsfTrack()->dxy(vertex.position()));
     dZ = fabs(iElectron.gsfTrack()->dz(vertex.position()));
-    expectedMissingInnerHits = iElectron.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+    expectedMissingInnerHits = iElectron.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   }
 
   bool passConversionVeto = ( iElectron.passConversionVeto() );
@@ -1144,7 +1144,7 @@ bool MiniAODHelper::PassElectronSpring15Id(const pat::Electron& iElectron, const
     if( iElectron.gsfTrack().isAvailable() ){
 	d0 = fabs(iElectron.gsfTrack()->dxy(vertex.position()));
 	dZ = fabs(iElectron.gsfTrack()->dz(vertex.position()));
-	expectedMissingInnerHits = iElectron.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+	expectedMissingInnerHits = iElectron.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
     }
 
     bool passConversionVeto = ( iElectron.passConversionVeto() );

@@ -516,7 +516,7 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_sc_lazyTools_eseffsirir", lazytool.eseffsirir(*cl_ref)) ;
 
     reco::HitPattern kfHitPattern = gsfiter->gsfTrack()->hitPattern();
-    int nbtrackhits = kfHitPattern.numberOfHits(reco::HitPattern::TRACK_HITS) ;
+    int nbtrackhits = kfHitPattern.numberOfAllHits(reco::HitPattern::TRACK_HITS) ;
     std::vector<int> gsf_hitsinfo ;
     for(int hititer=0 ; hititer<25 ; hititer++){
       
