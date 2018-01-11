@@ -22,6 +22,11 @@ private:
   edm::EDGetTokenT<edm::ValueMap<bool> > VIDmvaEleIDwp80_;
   edm::EDGetTokenT<edm::ValueMap<bool> > VIDHEEP7_;
 
+  edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
+
   edm::EDGetTokenT<edm::View<pat::Electron>> electronCollectionToken_;
   edm::EDGetTokenT<edm::View<pat::Electron>> electronCollectionToken80_;
   edm::InputTag      electronCollectionLabel_ ;

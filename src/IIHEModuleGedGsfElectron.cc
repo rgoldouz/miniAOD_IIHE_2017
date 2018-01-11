@@ -49,9 +49,11 @@ IIHEModuleGedGsfElectron::IIHEModuleGedGsfElectron(const edm::ParameterSet& iCon
   VIDLoose_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("VIDLoose"));
   VIDMedium_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("VIDMedium"));
   VIDTight_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("VIDTight"));
-  VIDmvaEleIDwp90_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("VIDmvaEleIDwp90"));
-  VIDmvaEleIDwp80_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("VIDmvaEleIDwp80"));
   VIDHEEP7_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("VIDHEEP7"));
+  eleMediumIdMapToken_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"));
+  eleTightIdMapToken_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"));
+  mvaValuesMapToken_ = iC.consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"));
+  mvaCategoriesMapToken_ = iC.consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"));
 
   electronCollectionToken_     = iC.consumes<edm::View<pat::Electron>> (iConfig.getParameter<edm::InputTag>("electronCollection")) ;
   ETThreshold_ = iConfig.getUntrackedParameter<double>("electronPtThreshold") ;
@@ -118,11 +120,12 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsf_VIDLoose");
   addBranch("gsf_VIDMedium");
   addBranch("gsf_VIDTight");
-//  addBranch("gsf_VIDmvaEleIDwp90");
-//  addBranch("gsf_VIDmvaEleIDwp80");
   addBranch("gsf_VIDHEEP7");
+  addBranch("gsf_VIDMVAMedium");
+  addBranch("gsf_VIDMVATight");
 
   setBranchType(kVectorFloat) ;
+  addBranch("gsf_VIDMVAValue");
   addBranch("gsf_deltaEtaSeedClusterTrackAtCalo") ;
   addBranch("gsf_deltaPhiSeedClusterTrackAtCalo") ;
   addBranch("gsf_ecalEnergy") ;
@@ -258,6 +261,7 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("EEHits_ieta"    ) ;
   addBranch("EEHits_iphi"    ) ;
   addBranch("EEHits_RecoFlag") ;
+  addBranch("gsf_VIDMVAVCategories") ;
 
   setBranchType(kVectorBool) ;
   addBranch("EEHits_kSaturated"           ) ;
@@ -298,6 +302,16 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
 
   edm::Handle<edm::ValueMap<bool>> VIDTightHandle_;
   iEvent.getByToken(VIDTight_,VIDTightHandle_);
+
+  edm::Handle<edm::ValueMap<bool> > medium_id_decisions;
+  edm::Handle<edm::ValueMap<bool> > tight_id_decisions; 
+  iEvent.getByToken(eleMediumIdMapToken_,medium_id_decisions);
+  iEvent.getByToken(eleTightIdMapToken_,tight_id_decisions);
+  edm::Handle<edm::ValueMap<float> > mvaValues;
+  edm::Handle<edm::ValueMap<int> > mvaCategories;
+  iEvent.getByToken(mvaValuesMapToken_,mvaValues);
+  iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
+
 
 //  edm::Handle<edm::ValueMap<bool>> VIDmvaEleIDwp90Handle_;
 //  iEvent.getByToken(VIDmvaEleIDwp90_,VIDmvaEleIDwp90Handle_);
@@ -391,6 +405,10 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_VIDMedium"                     , (*VIDMediumHandle_).get(gsfref)          ) ;
     store("gsf_VIDTight"                      , (*VIDTightHandle_).get(gsfref)           ) ;
     store("gsf_VIDHEEP7"                      , (*VIDHEEP7Handle_).get(gsfref)           ) ;
+    store("gsf_VIDMVAMedium"                      , (*medium_id_decisions).get(gsfref)          ) ;
+    store("gsf_VIDMVATight"                      , (*tight_id_decisions).get(gsfref)           ) ;
+    store("gsf_VIDMVAValue"                      , (*mvaValues).get(gsfref)           ) ;
+    store("gsf_VIDMVAVCategories"                      , (*mvaCategories).get(gsfref)           ) ;
 //    store("gsf_VIDmvaEleIDwp90"               , (*VIDmvaEleIDwp90Handle_).get(gsfref)        ) ;
 //    store("gsf_VIDmvaEleIDwp80"               , (*VIDmvaEleIDwp80Handle_).get(gsfref)        ) ;
     store("gsf_dr03EcalRecHitSumEt"           , gsfiter->dr03EcalRecHitSumEt()           ) ;
