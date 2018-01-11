@@ -28,8 +28,10 @@ class TriggerFilter{
   std::string triggerName_ ;
   std::vector<float> etaValues_ ;
   std::vector<float> phiValues_ ;
+  std::vector<float> etValues_ ;
   std::string etaBranchName_ ;
   std::string phiBranchName_ ;
+  std::string etBranchName_ ;
   int index_ ;
 public:
   TriggerFilter(std::string, std::string);
@@ -82,6 +84,7 @@ private:
  
   std::vector<float> etaValues_ ;
   std::vector<float> phiValues_ ;
+  std::vector<float> etValues_ ;
   
   int nSC_     ;
   int nPh_     ;
@@ -102,7 +105,7 @@ private:
   std::string prescaleBranchName_ ;
   std::string etaBranchName_      ;
   std::string phiBranchName_      ;
- 
+  std::string etBranchName_ ;  
   enum searchStatuses{ notSearchedFor , searchedForAndFound , searchedForAndNotFound } ;
   
   int nMuonsInTriggerName() ;
