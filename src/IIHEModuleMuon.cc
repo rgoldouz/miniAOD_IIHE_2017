@@ -253,6 +253,8 @@ void IIHEModuleMuon::beginJob(){
   addBranch("mu_combinedQuality_chi2LocalPosition"        ) ;
   addBranch("mu_segmentCompatibility"        ) ;
   addBranch("mu_dB"        ) ;
+// added 
+  addBranch("mu_pt_default"  ) ;
 
   addBranch("mu_isolationR03_sumPt"        ) ;
   addBranch("mu_isolationR03_trackerVetoPt") ;
@@ -269,6 +271,7 @@ void IIHEModuleMuon::beginJob(){
   addBranch("mu_isolationR05_hadVetoEt"    ) ;
   
   addBranch("mu_pfIsolationR03_sumChargedHadronPt"             ) ;
+  addBranch("mu_pfIsolationR03_sumNeutralHadronEt"             ) ;
   addBranch("mu_pfIsolationR03_sumChargedParticlePt"           ) ;
   addBranch("mu_pfIsolationR03_sumPhotonEt"                    ) ;
   addBranch("mu_pfIsolationR03_sumNeutralHadronEtHighThreshold") ;
@@ -276,6 +279,7 @@ void IIHEModuleMuon::beginJob(){
   addBranch("mu_pfIsolationR03_sumPUPt"                        ) ;
   
   addBranch("mu_pfIsolationR04_sumChargedHadronPt"             ) ;
+  addBranch("mu_pfIsolationR04_sumNeutralHadronEt"             ) ;
   addBranch("mu_pfIsolationR04_sumChargedParticlePt"           ) ;
   addBranch("mu_pfIsolationR04_sumPhotonEt"                    ) ;
   addBranch("mu_pfIsolationR04_sumNeutralHadronEtHighThreshold") ;
@@ -455,7 +459,8 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     const MuonIsolation   iso50       = muIt->isolationR05() ;
     const MuonPFIsolation pfIso30     = muIt->pfIsolationR03() ;
     const MuonPFIsolation pfIso40     = muIt->pfIsolationR04() ;
-    
+   
+    store("mu_pt_default"                , muIt->pt()         ); 
     store("mu_isolationR03_sumPt"        , iso30.sumPt        ) ;
     store("mu_isolationR03_trackerVetoPt", iso30.trackerVetoPt) ;
     store("mu_isolationR03_emEt"         , iso30.emEt         ) ;
@@ -471,6 +476,7 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     store("mu_isolationR05_hadVetoEt"    , iso50.hadVetoEt    ) ;
     
     store("mu_pfIsolationR03_sumChargedHadronPt"             , pfIso30.sumChargedHadronPt             ) ;
+    store("mu_pfIsolationR03_sumNeutralHadronEt"             , pfIso30.sumNeutralHadronEt             ) ;
     store("mu_pfIsolationR03_sumChargedParticlePt"           , pfIso30.sumChargedParticlePt           ) ;
     store("mu_pfIsolationR03_sumPhotonEt"                    , pfIso30.sumPhotonEt                    ) ;
     store("mu_pfIsolationR03_sumNeutralHadronEtHighThreshold", pfIso30.sumNeutralHadronEtHighThreshold) ;
@@ -478,6 +484,7 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     store("mu_pfIsolationR03_sumPUPt"                        , pfIso30.sumPUPt                        ) ;
     
     store("mu_pfIsolationR04_sumChargedHadronPt"             , pfIso40.sumChargedHadronPt             ) ;
+    store("mu_pfIsolationR04_sumNeutralHadronEt"             , pfIso40.sumNeutralHadronEt             ) ;
     store("mu_pfIsolationR04_sumChargedParticlePt"           , pfIso40.sumChargedParticlePt           ) ;
     store("mu_pfIsolationR04_sumPhotonEt"                    , pfIso40.sumPhotonEt                    ) ;
     store("mu_pfIsolationR04_sumNeutralHadronEtHighThreshold", pfIso40.sumNeutralHadronEtHighThreshold) ;

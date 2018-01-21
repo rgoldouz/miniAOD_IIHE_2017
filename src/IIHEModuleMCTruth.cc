@@ -70,6 +70,7 @@ void IIHEModuleMCTruth::beginJob(){
   addBranch("mc_pdgId") ;
   addBranch("mc_charge") ;
   addBranch("mc_status") ;
+  addBranch("mc_status_flags");
   setBranchType(kVectorFloat) ;
   addBranch("mc_mass") ;
   addBranch("mc_px") ;
@@ -324,6 +325,25 @@ void IIHEModuleMCTruth::analyze(const edm::Event& iEvent, const edm::EventSetup&
     store("mc_pdgId"  , ob->getCandidate()->pdgId() ) ;
     store("mc_charge" , ob->getCandidate()->charge()) ;
     store("mc_status" , ob->getCandidate()->status()) ;
+    // storing flags of a gen particle
+    int flags = 0;
+    const reco::GenParticle* p = (GenParticle*) ob->getCandidate();
+
+    if (p->statusFlags().isPrompt())                  flags |= (1 << 0);
+    if (p->statusFlags().isDecayedLeptonHadron())     flags |= (1 << 1);
+    if (p->statusFlags().isTauDecayProduct())         flags |= (1 << 2);
+    if (p->statusFlags().isPromptTauDecayProduct())   flags |= (1 << 3);
+    if (p->statusFlags().isDirectTauDecayProduct())   flags |= (1 << 4);
+    if (p->statusFlags().isDirectPromptTauDecayProduct())       flags |= (1 << 5);
+    if (p->statusFlags().isDirectHadronDecayProduct())          flags |= (1 << 6);
+    if (p->statusFlags().isHardProcess())             flags |= (1 << 7);
+    if (p->statusFlags().fromHardProcess())           flags |= (1 << 8);
+    if (p->statusFlags().isHardProcessTauDecayProduct())       flags |= (1 << 9);
+    if (p->statusFlags().isDirectHardProcessTauDecayProduct()) flags |= (1 << 10);
+    if (p->statusFlags().fromHardProcessBeforeFSR())  flags |= (1 << 11);
+    if (p->statusFlags().isLastCopyBeforeFSR())       flags |= (1 << 12);
+
+    store("mc_status_flags" , flags);
   }
   
   store("mc_trueNumInteractions", trueNumInteractions) ;

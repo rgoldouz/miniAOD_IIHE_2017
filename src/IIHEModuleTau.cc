@@ -94,6 +94,30 @@ void IIHEModuleTau::beginJob(){
 	addBranch("tau_againstElectronVTightMVA6");
 	addBranch("tau_mc_bestDR");
 	addBranch("tau_mc_ERatio");
+
+	addBranch("tau_byVVLooseIsolationMVArun2v1DBoldDMwLTNew");
+	addBranch("tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew");
+	addBranch("tau_byLooseIsolationMVArun2v1DBoldDMwLTNew");;
+	addBranch("tau_byMediumIsolationMVArun2v1DBoldDMwLTNew") ;
+	addBranch("tau_byTightIsolationMVArun2v1DBoldDMwLTNew");
+	addBranch("tau_byVTightIsolationMVArun2v1DBoldDMwLTNew");
+	addBranch("tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew");
+	addBranch("tau_byIsolationMVArun2v1DBoldDMwLTrawNew");
+	addBranch("tau_againstElectronMVA6RawNew");
+
+	addBranch("tau_chargedIsoPtSum");
+	addBranch("tau_neutralIsoPtSum");
+	addBranch("tau_puCorrPtSum");
+	addBranch("tau_footprintCorrection");
+	addBranch("tau_neutralIsoPtSumWeight");
+	addBranch("tau_photonPtSumOutsideSignalCone");
+	addBranch("tau_byPhotonPtSumOutsideSignalCone");
+	addBranch("tau_footprintCorrectiondR03");
+	addBranch("tau_chargedIsoPtSumdR03");
+	addBranch("tau_neutralIsoPtSumWeightdR03");
+	addBranch("tau_neutralIsoPtSumdR03");
+	addBranch("tau_photonPtSumOutsideSignalConedR03");
+
 	// by aman
 	addBranch("tau_PFChargedHadIso");
 	addBranch("tau_PFNeutralHadIso");
@@ -207,6 +231,29 @@ void IIHEModuleTau::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		store("tau_againstElectronMediumMVA6"  , tauni->tauID("againstElectronMediumMVA6") );
 		store("tau_againstElectronTightMVA6"   , tauni->tauID("againstElectronTightMVA6") );
 		store("tau_againstElectronVTightMVA6"  , tauni->tauID("againstElectronVTightMVA6") );
+
+		store("tau_byVVLooseIsolationMVArun2v1DBoldDMwLTNew"    , tauni->tauID("byVVLooseIsolationMVArun2v1DBoldDMwLTNew") );
+		store("tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew"    , tauni->tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew") );
+		store("tau_byLooseIsolationMVArun2v1DBoldDMwLTNew"     , tauni->tauID("byLooseIsolationMVArun2v1DBoldDMwLTNew"));
+		store("tau_byMediumIsolationMVArun2v1DBoldDMwLTNew"     , tauni->tauID("byMediumIsolationMVArun2v1DBoldDMwLTNew"));
+		store("tau_byTightIsolationMVArun2v1DBoldDMwLTNew"     , tauni->tauID("byTightIsolationMVArun2v1DBoldDMwLTNew"));
+		store("tau_byVTightIsolationMVArun2v1DBoldDMwLTNew"    , tauni->tauID("byVTightIsolationMVArun2v1DBoldDMwLTNew"));
+		store("tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew"   , tauni->tauID("byVVTightIsolationMVArun2v1DBoldDMwLTNew"));
+		store("tau_byIsolationMVArun2v1DBoldDMwLTrawNew"       , tauni->tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"));
+		store("tau_againstElectronMVA6RawNew"  , tauni->tauID("againstElectronMVA6RawNew"));
+		store("tau_chargedIsoPtSum" , tauni->tauID("chargedIsoPtSum"));
+		store("tau_neutralIsoPtSum", tauni->tauID("neutralIsoPtSum"));
+		store("tau_puCorrPtSum", tauni->tauID("puCorrPtSum"));
+		store("tau_footprintCorrection", tauni->tauID("footprintCorrection"));
+		store("tau_neutralIsoPtSumWeight", tauni->tauID("neutralIsoPtSumWeight"));
+		store("tau_photonPtSumOutsideSignalCone", tauni->tauID("photonPtSumOutsideSignalCone"));
+		store("tau_byPhotonPtSumOutsideSignalCone", tauni->tauID("byPhotonPtSumOutsideSignalCone"));
+		store("tau_footprintCorrectiondR03", tauni->tauID("footprintCorrectiondR03"));
+		store("tau_chargedIsoPtSumdR03", tauni->tauID("chargedIsoPtSumdR03"));
+		store("tau_neutralIsoPtSumWeightdR03", tauni->tauID("neutralIsoPtSumWeightdR03"));
+		store("tau_neutralIsoPtSumdR03", tauni->tauID("neutralIsoPtSumdR03"));
+		store("tau_photonPtSumOutsideSignalConedR03", tauni->tauID("photonPtSumOutsideSignalConedR03"));
+
 
 		store("tau_decayMode"         , tauni->decayMode()) ;
 		store("tau_charge"            , tauni->charge()) ;
