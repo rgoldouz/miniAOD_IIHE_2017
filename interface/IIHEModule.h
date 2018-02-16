@@ -76,7 +76,8 @@ public:
   void store(std::string, std::vector<int         >);
   void store(std::string, std::vector<unsigned int>);
   void setBranchType(int);
-  
+ 
+  bool addHistToMetaTree(std::string, TH1F) ; 
   bool addValueToMetaTree(std::string, float) ;
   bool addFVValueToMetaTree(std::string, std::vector<float>); 
   bool addCVValueToMetaTree(std::string, std::vector<std::string>);

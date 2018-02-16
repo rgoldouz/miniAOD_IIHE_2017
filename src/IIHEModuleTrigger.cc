@@ -52,6 +52,7 @@ IIHEModuleTrigger::IIHEModuleTrigger(const edm::ParameterSet& iConfig, edm::Cons
   includeDoubleElectronSingleMuonTriggers_ = (triggersIn.find("doubleElectronSingleMuon")!=std::string::npos) ;
   includeSinglePhotonTriggers_ = (triggersIn.find("singlePhoton" )!=std::string::npos) ; 
   includeMETTriggers_ = (triggersIn.find("MET" )!=std::string::npos) ; 
+  includeSingleTauTriggers_ = (triggersIn.find("singleTau" )!=std::string::npos) ;
 
   std::cout << "Including single electron triggers:            " << includeSingleElectronTriggers_ << std::endl ;
   std::cout << "Including double electron triggers:            " << includeDoubleElectronTriggers_ << std::endl ;
@@ -64,6 +65,7 @@ IIHEModuleTrigger::IIHEModuleTrigger(const edm::ParameterSet& iConfig, edm::Cons
   std::cout << "Including double electron single muon triggers:" << includeDoubleElectronSingleMuonTriggers_ << std::endl ;
   std::cout << "Including single photon triggers:              " << includeSinglePhotonTriggers_ << std::endl ; 
   std::cout << "Including MET triggers:                        " << includeMETTriggers_ << std::endl ;
+  std::cout << "Including single tau triggers:                 " << includeSingleTauTriggers_ << std::endl ;
 }
 IIHEModuleTrigger::~IIHEModuleTrigger(){}
 
@@ -198,7 +200,8 @@ void IIHEModuleTrigger::beginRun(edm::Run const& iRun, edm::EventSetup const& iS
         if(hlt->isOnlySingleElectronSingleMuon() && includeSingleElectronSingleMuonTriggers_) addThisTrigger = true ;
         if(hlt->isOnlySingleElectronDoubleMuon() && includeSingleElectronDoubleMuonTriggers_) addThisTrigger = true ;
         if(hlt->isOnlyDoubleElectronSingleMuon() && includeDoubleElectronSingleMuonTriggers_) addThisTrigger = true ;
-        if(hlt->isSinglePhoton() && includeSinglePhotonTriggers_ ) addThisTrigger = true ;        
+        if(hlt->isSinglePhoton() && includeSinglePhotonTriggers_ ) addThisTrigger = true ;       
+        if(hlt->isSingleTau() && includeSingleTauTriggers_ ) addThisTrigger = true ; 
         if(hlt->isMET() && includeMETTriggers_) addThisTrigger = true ;
         // Only loop over trigger names if we have to
         if(addThisTrigger==false){

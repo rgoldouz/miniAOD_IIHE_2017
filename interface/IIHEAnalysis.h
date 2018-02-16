@@ -92,7 +92,8 @@ public:
   int  getBranchType() ;
   int  saveToFile(TObject*) ;
   void listBranches() ;
-  
+
+  bool addHistToMetaTree(std::string, TH1F) ;  
   bool addValueToMetaTree(std::string, float) ;
   bool addFVValueToMetaTree(std::string, std::vector<float>) ;
   bool addCVValueToMetaTree(std::string, std::vector<std::string>) ; 

@@ -23,7 +23,7 @@ IIHEModuleMCTruth::~IIHEModuleMCTruth(){}
 
 // ------------ method called once each job just before starting event loop  ------------
 void IIHEModuleMCTruth::beginJob(){
- std::vector<int> MCPdgIdsToSave ;
+  std::vector<int> MCPdgIdsToSave ;
   MCPdgIdsToSave.push_back(11) ; // Electron
   MCPdgIdsToSave.push_back(12) ; // Neutrino electron
   MCPdgIdsToSave.push_back(13) ; // Muon
@@ -45,16 +45,6 @@ void IIHEModuleMCTruth::beginJob(){
   MCPdgIdsToSave.push_back(33) ; // Z'' boson
   MCPdgIdsToSave.push_back(34) ; // W'  boson
   addToMCTruthWhitelist(MCPdgIdsToSave) ;
-/*
-  setBranchType(kVectorFloat) ;
-  addBranch("LHE_Pt");
-  addBranch("LHE_Eta");
-  addBranch("LHE_Phi");
-  addBranch("LHE_E");
-  setBranchType(kVectorInt) ;
-  addBranch("LHE_pdgid");
-  addBranch("LHE_status");
-*/
   addBranch("mc_n", kUInt) ;
   addBranch("mc_weight", kFloat) ;
   addBranch("mc_w_sign", kFloat) ;
@@ -110,8 +100,8 @@ void IIHEModuleMCTruth::beginJob(){
   addBranch("genjet_phi") ;
   addBranch("genjet_energy") ;
 
-
   nEventsWeighted_ = 0.0 ;
+  pileupDist_ = new TH1F("pileupDist","pileup distribution",120,0,120);
 }
 
 // ------------ method called to for each event  ------------
@@ -127,23 +117,6 @@ void IIHEModuleMCTruth::analyze(const edm::Event& iEvent, const edm::EventSetup&
       store("genjet_energy", genJets->at(j).energy()) ;
     }
 
-/*
-  edm::Handle<LHEEventProduct> lhe_handle;
-  iEvent.getByToken(lheEventLabel_, lhe_handle);
-  if (lhe_handle.isValid()){
-    std::vector<lhef::HEPEUP::FiveVector> lheParticles = lhe_handle->hepeup().PUP;
-    ROOT::Math::PxPyPzEVector cand_;
-    for (unsigned i = 0; i < lheParticles.size(); ++i) {
-      cand_ = ROOT::Math::PxPyPzEVector(lheParticles[i][0],lheParticles[i][1],lheParticles[i][2],lheParticles[i][3]);
-      store("LHE_Pt",(cand_).Pt());
-      store("LHE_Eta",(cand_).Eta());
-      store("LHE_Phi",(cand_).Phi());
-      store("LHE_E",(cand_).E());
-      store("LHE_pdgid",lhe_handle->hepeup().IDUP[i]);
-      store("LHE_status",lhe_handle->hepeup().ISTUP[i]);
-    }
-  }
-*/
 
   edm::Handle<GenEventInfoProduct> genEventInfoHandle;
   iEvent.getByToken(generatorLabel_, genEventInfoHandle);
@@ -172,6 +145,7 @@ void IIHEModuleMCTruth::analyze(const edm::Event& iEvent, const edm::EventSetup&
     for(PVI = puInfo->begin() ; PVI != puInfo->end() ; ++PVI){
       int BX = PVI->getBunchCrossing() ;
       if(BX==0){ // "0" is the in-time crossing, negative values are the early crossings, positive are late
+        pileupDist_->Fill(PVI->getTrueNumInteractions());
         trueNumInteractions = PVI->getTrueNumInteractions() ;
         PU_NumInteractions  = PVI->getPU_NumInteractions() ;
       }
@@ -384,6 +358,7 @@ void IIHEModuleMCTruth::endEvent(){}
 // ------------ method called once each job just after ending the event loop  ------------
 void IIHEModuleMCTruth::endJob(){
   addValueToMetaTree("mc_nEventsWeighted", nEventsWeighted_) ;
+  parent_->saveToFile(pileupDist_) ;
 }
 
 DEFINE_FWK_MODULE(IIHEModuleMCTruth);

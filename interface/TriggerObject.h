@@ -157,6 +157,7 @@ public:
   bool isOnlySingleElectronDoubleMuon(){ return (nTypes_==1*pow(10,(int)kElectron)+2*pow(10,(int)kMuon)) ; }
   bool isOnlyDoubleElectronSingleMuon(){ return (nTypes_==2*pow(10,(int)kElectron)+1*pow(10,(int)kMuon)) ; }
   bool isMET(){ return (hasMET_ ==1); }
+  bool isSingleTau(){ return nTau_==1 ; }
   void saveFilters(){saveFilters_=1 ;}
   void savePrescale(){savePrescale_=1 ;} 
   std::vector<TriggerFilter*> filters_ ;

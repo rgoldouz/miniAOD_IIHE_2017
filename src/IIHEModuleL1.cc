@@ -15,11 +15,12 @@ IIHEModuleL1::~IIHEModuleL1(){}
 
 void IIHEModuleL1::beginJob(){
 
+  setBranchType(kVectorFloat);
+  addBranch("L1_EG_pt");
+  addBranch("L1_EG_eta");
+  addBranch("L1_EG_phi");
   setBranchType(kVectorInt);
-  addBranch("L1_pt");
-  addBranch("L1_eta");
-  addBranch("L1_phi");
-  addBranch("L1_Iso");
+  addBranch("L1_EG_Iso");
 }
 
 void IIHEModuleL1::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
@@ -28,11 +29,11 @@ void IIHEModuleL1::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   iEvent.getByToken( l1noniso_, egammas );
   for(int i = egammas->getFirstBX(); i <= egammas->getLastBX(); ++i) {
     for(std::vector<l1t::EGamma>::const_iterator eg = egammas->begin(i); eg != egammas->end(i); ++eg) {
-      if (eg->hwPt() <10) continue;
-        store("L1_pt" , eg->hwPt());
-        store("L1_eta", eg->hwEta());
-        store("L1_phi", eg->hwPhi());
-        store("L1_Iso", eg->hwIso());
+      if (i != 0) continue;
+        store("L1_EG_pt" , eg->pt());
+        store("L1_EG_eta", eg->eta());
+        store("L1_EG_phi", eg->phi());
+        store("L1_EG_Iso", eg->hwIso());
     }
   }
 }

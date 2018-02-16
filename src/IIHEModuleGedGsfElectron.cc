@@ -54,7 +54,7 @@ IIHEModuleGedGsfElectron::IIHEModuleGedGsfElectron(const edm::ParameterSet& iCon
   eleTightIdMapToken_ = iC.consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"));
   mvaValuesMapToken_ = iC.consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"));
   mvaCategoriesMapToken_ = iC.consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"));
-
+  calibratedElectronCollectionToken_ = iC.consumes<edm::View<pat::Electron>> (iConfig.getParameter<edm::InputTag>("calibratedElectronCollection")) ;
   electronCollectionToken_     = iC.consumes<edm::View<pat::Electron>> (iConfig.getParameter<edm::InputTag>("electronCollection")) ;
   ETThreshold_ = iConfig.getUntrackedParameter<double>("electronPtThreshold") ;
   primaryVertexLabel_          = iConfig.getParameter<edm::InputTag>("primaryVertex") ;
@@ -66,6 +66,25 @@ IIHEModuleGedGsfElectron::~IIHEModuleGedGsfElectron(){}
 void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsf_n", kUInt) ;
   addBranch("gsf_classification", kVectorInt) ;
+
+  setBranchType(kVectorFloat) ;
+  addBranch("gsfCalibrated_energy") ;
+  addBranch("gsfCalibrated_p") ;
+  addBranch("gsfCalibrated_pt") ;
+  addBranch("gsfCalibrated_et") ;
+  addBranch("gsfCalibrated_caloEnergy") ;
+  addBranch("gsfCalibrated_hadronicOverEm") ;
+  addBranch("gsfCalibrated_hcalDepth1OverEcal") ;
+  addBranch("gsfCalibrated_hcalDepth2OverEcal") ;
+  addBranch("gsfCalibrated_dr03EcalRecHitSumEt") ;
+  addBranch("gsfCalibrated_dr03HcalDepth1TowerSumEt") ;
+  addBranch("gsfCalibrated_ooEmooP") ;
+  addBranch("gsfCalibrated_eSuperClusterOverP") ;
+  setBranchType(kVectorBool) ;
+  addBranch("gsfCalibrated_Loose");
+  addBranch("gsfCalibrated_Medium");
+  addBranch("gsfCalibrated_Tight");
+  addBranch("gsfCalibrated_isHeepV7");
 
   setBranchType(kVectorFloat) ;
   addBranch("gsf_energy") ;
@@ -287,6 +306,9 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
 
   edm::Handle<edm::View<pat::Electron>>     electronCollection_ ;
   iEvent.getByToken( electronCollectionToken_ , electronCollection_) ;
+
+  edm::Handle<edm::View<pat::Electron>>     calibratedElectronCollection_ ;
+  iEvent.getByToken( calibratedElectronCollectionToken_ , calibratedElectronCollection_) ;
 
   edm::Handle<edm::ValueMap<float>> eleTrkPtIsoHandle_;
   iEvent.getByToken(eleTrkPtIso_,eleTrkPtIsoHandle_);
@@ -591,7 +613,47 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
 
     store("gsf_isHeepV7", isHeep);
 
+    Ptr<pat::Electron> gsfiterCalibrated = calibratedElectronCollection_->ptrAt( i );
+      store("gsfCalibrated_energy"                     , gsfiterCalibrated->energy()                        ) ;
+      store("gsfCalibrated_p"                          , gsfiterCalibrated->p()                             ) ;
+      store("gsfCalibrated_pt"                         , gsfiterCalibrated->pt()                            ) ;
+      store("gsfCalibrated_et"                         , gsfiterCalibrated->et()                            ) ;
+      store("gsfCalibrated_caloEnergy"                 , gsfiterCalibrated->caloEnergy()                    ) ; 
+      store("gsfCalibrated_hadronicOverEm"             , gsfiterCalibrated->hadronicOverEm()                ) ;
+      store("gsfCalibrated_hcalDepth1OverEcal"         , gsfiterCalibrated->hcalDepth1OverEcal()            ) ;
+      store("gsfCalibrated_hcalDepth2OverEcal"         , gsfiterCalibrated->hcalDepth2OverEcal()            ) ;
+      store("gsfCalibrated_dr03EcalRecHitSumEt"        , gsfiterCalibrated->dr03EcalRecHitSumEt()           ) ;
+      store("gsfCalibrated_dr03HcalDepth1TowerSumEt"   , gsfiterCalibrated->dr03HcalDepth1TowerSumEt()      ) ;
+      store("gsfCalibrated_Loose"                      , electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedL) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5);
+      store("gsfCalibrated_Medium"                     , electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedM) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5) ;
+      store("gsfCalibrated_Tight"                      , electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedT) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5);
+      store("gsfCalibrated_ooEmooP"                       ,fabs(1.0/gsfiterCalibrated->ecalEnergy() - gsfiterCalibrated->eSuperClusterOverP()/gsfiterCalibrated->ecalEnergy() )) ;
+      store("gsfCalibrated_eSuperClusterOverP"            ,gsfiterCalibrated->eSuperClusterOverP()) ;
 
+        bool isHeep80 = false;
+        float ETCalibrated = gsfiterCalibrated->caloEnergy()*sin(2.*atan(exp(-1.*gsfiterCalibrated->eta()))) ;
+        if ( ETCalibrated > 35  && fabs(gsfiterCalibrated->superCluster()->eta()) < 1.4442  &&
+        gsfiterCalibrated->ecalDrivenSeed()                                            &&
+        fabs(gsfiterCalibrated->deltaEtaSeedClusterTrackAtVtx()) < 0.004                    &&
+        fabs(gsfiterCalibrated->deltaPhiSuperClusterTrackAtVtx()) < 0.06                     &&
+        gsfiterCalibrated->hadronicOverEm() < 0.05 + 1/ gsfiterCalibrated->superCluster()->energy()          &&
+        (gsfiterCalibrated->full5x5_e1x5()/gsfiterCalibrated->full5x5_e5x5() > 0.83 || gsfiterCalibrated->full5x5_e2x5Max()/gsfiterCalibrated->full5x5_e5x5() > 0.94) &&
+        gsf_nLostInnerHits < 2                                               &&
+        fabs(gsfiterCalibrated->gsfTrack()->dxy(firstpvertex->position())) < 0.02                       &&
+        gsfiterCalibrated->dr03EcalRecHitSumEt() + gsfiterCalibrated->dr03HcalDepth1TowerSumEt() < 2 + 0.03 * ETCalibrated + 0.28 * rho   &&
+        (*eleTrkPtIsoHandle_).get(gsfref) < 5) isHeep80 = true;
+        if ( ETCalibrated > 35  && (fabs(gsfiterCalibrated->superCluster()->eta()) > 1.566  && (abs(gsfiterCalibrated->superCluster()->eta()) < 2.5) )&&
+        gsfiterCalibrated->ecalDrivenSeed()                                            &&
+        fabs(gsfiterCalibrated->deltaEtaSeedClusterTrackAtVtx()) < 0.006                    &&
+        fabs(gsfiterCalibrated->deltaPhiSuperClusterTrackAtVtx()) < 0.06                     &&
+        gsfiterCalibrated->hadronicOverEm() < 0.05 + 5/ gsfiterCalibrated->superCluster()->energy()          &&
+        gsfiterCalibrated->full5x5_sigmaIetaIeta() <0.03                                         &&
+        gsf_nLostInnerHits < 2                                               &&
+        fabs(gsfiterCalibrated->gsfTrack()->dxy(firstpvertex->position())) < 0.05                       &&
+        (( ETCalibrated < 50 && gsfiterCalibrated->dr03EcalRecHitSumEt() + gsfiterCalibrated->dr03HcalDepth1TowerSumEt() < 2.5 + 0.28 * rho) ||
+        ( ETCalibrated > 50 && gsfiterCalibrated->dr03EcalRecHitSumEt() + gsfiterCalibrated->dr03HcalDepth1TowerSumEt() < 2.5 + 0.03 * (ETCalibrated-50) + 0.28 * rho)) &&
+        (*eleTrkPtIsoHandle_).get(gsfref) < 5) isHeep80 = true;
+      store("gsfCalibrated_isHeepV7", isHeep80);
 
  }
   store("gsf_n", gsf_n) ;

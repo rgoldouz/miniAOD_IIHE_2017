@@ -282,6 +282,18 @@ my_id_modules = ["RecoEgamma.ElectronIdentification.Identification.cutBasedElect
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
+
+
+#Electron energy scale and smearing
+process.load("Configuration.StandardSequences.Services_cff")
+process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
+                                                    calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+                                                    engineName = cms.untracked.string("TRandom3")),
+                                                  )
+process.load("EgammaAnalysis.ElectronTools.calibratedPatElectronsRun2_cfi")
+process.calibratedPatElectrons.isMC = cms.bool("mc" in options.DataProcessing)
+process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons","","PAT")
+process.calibratedPatElectrons.isSynchronization = cms.bool(False)
 ##########################################################################################
 #                            MY analysis input!                              #
 ##########################################################################################
@@ -309,7 +321,7 @@ process.IIHEAnalysis.METsMuEGCleanCollection                     = cms.InputTag(
 process.IIHEAnalysis.discardedMuonCollection                     = cms.InputTag("packedPFCandidatesDiscarded"                               )
 
 #use 80 regression + scale/smearing for electron
-process.IIHEAnalysis.electronCollection80    = cms.InputTag("calibratedPatElectrons","","IIHEAnalysis")
+process.IIHEAnalysis.calibratedElectronCollection    = cms.InputTag("calibratedPatElectrons","","IIHEAnalysis")
 
 #jet smeared collection
 #process.IIHEAnalysis.JetCollection                   = cms.InputTag("basicJetsForMet" ,"","IIHEAnalysis")
@@ -367,6 +379,7 @@ process.p1 = cms.Path(
     process.rerunMvaIsolation2SeqRun2 *
     process.rerunDiscriminationAgainstElectronMVA6 *
     getattr(process, "NewTauIDsEmbedded") *
+    process.calibratedPatElectrons *
     process.egmGsfElectronIDSequence * 
     process.IIHEAnalysis
     )

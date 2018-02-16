@@ -31,7 +31,7 @@ IIHEAnalysis = cms.EDAnalyzer("IIHEAnalysis",
     #*******************************************************************************************************************************************
     #Trigger paths that we want to save
 #    triggers                                    = cms.untracked.string("singleElectron;doubleElectron;singleMuon;singlePhoton;singleElectronSingleMuon;doubleMuon"),
-    triggers                                    = cms.untracked.string("singleElectron;doubleElectron;singleMuon;singlePhoton;singleElectronSingleMuon;doubleMuon;MET"),
+    triggers                                    = cms.untracked.string("singleElectron;doubleElectron;singleMuon;singlePhoton;singleElectronSingleMuon;doubleMuon;MET;singleTau"),
     globalTag                                   = cms.string(""),
     
     # Trigger matching stuff.  0.5 should be sufficient.

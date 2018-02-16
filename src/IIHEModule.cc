@@ -35,6 +35,10 @@ void IIHEModule::store(std::string name, std::vector<int>          value){ paren
 void IIHEModule::store(std::string name, std::vector<unsigned int> value){ parent_->store(name, value) ; }
 void IIHEModule::setBranchType(int type){ parent_->setBranchType(type) ; }
 
+bool IIHEModule::addHistToMetaTree(std::string name, TH1F value){
+  return parent_->addHistToMetaTree(name, value) ;
+}
+
 bool IIHEModule::addValueToMetaTree(std::string name, float value){
   return parent_->addValueToMetaTree(name, value) ;
 }

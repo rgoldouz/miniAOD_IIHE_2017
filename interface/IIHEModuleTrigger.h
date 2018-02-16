@@ -88,6 +88,7 @@ private:
   bool includeSingleElectronDoubleMuonTriggers_ ;
   bool includeDoubleElectronSingleMuonTriggers_ ;
   bool includeSinglePhotonTriggers_ ;
+  bool includeSingleTauTriggers_ ;
   bool includeMETTriggers_ ;
 };
 #endif

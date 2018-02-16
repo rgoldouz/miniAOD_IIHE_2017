@@ -4,7 +4,7 @@
 
 // ROOT includes
 #include <TTree.h>
-
+#include <TH1F.h>
 #ifndef BRANCHWRAPPER
 #define BRANCHWRAPPER
 
@@ -26,6 +26,18 @@ class BranchWrapperBase{
     std::string name_ ;
     bool is_filled_ ;
     bool is_touched_ ;
+};
+
+class BranchWrapperHist  : public BranchWrapperBase{
+  private:
+    TH1F value_ ;
+  public:
+    BranchWrapperHist(std::string) ;
+    ~BranchWrapperHist(){} ;
+    void set(TH1F) ;
+    int  config(TTree*) ;
+    void beginEvent() ;
+    void endEvent() ;
 };
 
 class BranchWrapperB  : public BranchWrapperBase{

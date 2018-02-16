@@ -18,6 +18,26 @@ void BranchWrapperBase::endEvent(){}
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                     Simple classes                                   //
 //////////////////////////////////////////////////////////////////////////////////////////
+
+BranchWrapperHist::BranchWrapperHist(std::string name): BranchWrapperBase(name){
+//  value_ = false ;
+}
+int BranchWrapperHist::config(TTree* tree){
+  if(!tree) return 1 ;
+//  if(tree->GetBranch(name().c_str())) return 2 ;
+  tree->Branch(name().c_str(), name().c_str(), &value_, 32000, 0) ;
+  return 0 ;
+}
+void BranchWrapperHist::set(TH1F value){
+  value_ = value ;
+}
+void BranchWrapperHist::beginEvent(){
+}
+void BranchWrapperHist::endEvent(){}
+
+
+//boolian
+
 BranchWrapperB::BranchWrapperB(std::string name): BranchWrapperBase(name){
   value_ = false ;
 }

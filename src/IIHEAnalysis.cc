@@ -116,6 +116,13 @@ int IIHEAnalysis::MCTruth_matchEtaPhi_getIndex(float eta, float phi){
   return -1 ;
 }
 
+bool IIHEAnalysis::addHistToMetaTree(std::string parName, TH1F value){
+  BranchWrapperHist* bw = new BranchWrapperHist(parName) ;
+  bw->set(value) ;
+  bw->config(metaTree_) ;
+  return true ;
+}
+
 bool IIHEAnalysis::addValueToMetaTree(std::string parName, float value){
   BranchWrapperF* bw = new BranchWrapperF(parName) ;
   metaTreePars_.push_back(bw) ;

@@ -28,7 +28,7 @@ private:
   edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 
   edm::EDGetTokenT<edm::View<pat::Electron>> electronCollectionToken_;
-  edm::EDGetTokenT<edm::View<pat::Electron>> electronCollectionToken80_;
+  edm::EDGetTokenT<edm::View<pat::Electron>> calibratedElectronCollectionToken_;
   edm::InputTag      electronCollectionLabel_ ;
   edm::EDGetTokenT<View<reco::Vertex>> vtxToken_;
   edm::InputTag           primaryVertexLabel_ ;
