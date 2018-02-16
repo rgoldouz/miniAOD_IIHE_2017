@@ -236,7 +236,7 @@ void IIHEModuleMuon::beginJob(){
   addBranch("mu_isLooseMuon"     ) ;
   addBranch("mu_isSoftMuon"     ) ;
   addBranch("mu_isHighPtMuon"     ) ;
-
+  addBranch("mu_isTrackerHighPtMuon"     ) ;
   
   // Hits block
   setBranchType(kVectorInt) ;
@@ -391,6 +391,9 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     store("mu_isLooseMuon"       , muon::isLooseMuon(*muIt)    ) ;
     store("mu_isSoftMuon"        , muon::isSoftMuon(*muIt,*pvCollection_->begin())  ) ;
     store("mu_isHighPtMuon"      , muon::isHighPtMuon(*muIt,*pvCollection_->begin())    ) ;
+    store("mu_isTrackerHighPtMuon"      , muon::isTrackerHighPtMuon(*muIt,*pvCollection_->begin())    ) ;
+
+
 
     int numberOfMatchStations    = 0 ;
     int numberOfValidPixelHits   = 0 ;
