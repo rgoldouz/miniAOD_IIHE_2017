@@ -295,7 +295,7 @@ process.calibratedPatElectrons.isMC = cms.bool("mc" in options.DataProcessing)
 process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons","","PAT")
 process.calibratedPatElectrons.isSynchronization = cms.bool(False)
 ##########################################################################################
-#                            MY analysis input!                              #
+#                            MY analysis input!                              ####
 ##########################################################################################
 process.load("UserCode.IIHETree.IIHETree_cfi")
 process.IIHEAnalysis.globalTag = cms.string(globalTag)
