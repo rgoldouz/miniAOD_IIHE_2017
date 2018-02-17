@@ -292,7 +292,7 @@ process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService
                                                   )
 process.load("EgammaAnalysis.ElectronTools.calibratedPatElectronsRun2_cfi")
 process.calibratedPatElectrons.isMC = cms.bool("mc" in options.DataProcessing)
-process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons","","PAT")
+process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons")
 process.calibratedPatElectrons.isSynchronization = cms.bool(False)
 ##########################################################################################
 #                            MY analysis input!                              ####
