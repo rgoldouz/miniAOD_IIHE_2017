@@ -366,7 +366,7 @@ process.IIHEAnalysis.includeLHEWeightModule        = cms.untracked.bool("mc" in 
 #process.IIHEAnalysis.includeDataModule            = cms.untracked.bool("data" in options.DataProcessing)
 
 
-process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked.bool(True)
+#process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked.bool(True)
 ##########################################################################################
 #                            Woohoo!  We"re ready to start!                              #
 ##########################################################################################

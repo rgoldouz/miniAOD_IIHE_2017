@@ -32,5 +32,6 @@ class IIHEModuleL1 : public IIHEModule {
 
  private:
   edm::EDGetTokenT<BXVector<l1t::EGamma>> l1noniso_;
+  edm::EDGetTokenT<BXVector<GlobalAlgBlk>> glbalgblk_token_;
 };
 #endif

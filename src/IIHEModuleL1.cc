@@ -10,6 +10,7 @@ using namespace edm ;
 
 IIHEModuleL1::IIHEModuleL1(const edm::ParameterSet& iConfig, edm::ConsumesCollector && iC): IIHEModule(iConfig){
   l1noniso_ = iC.consumes<BXVector<l1t::EGamma>>(iConfig.getParameter<edm::InputTag>("l1NonIsoCollection"));
+  glbalgblk_token_ =  iC.consumes<BXVector<GlobalAlgBlk>>(edm::InputTag("gtStage2Digis"));
 }
 IIHEModuleL1::~IIHEModuleL1(){}
 
@@ -21,6 +22,8 @@ void IIHEModuleL1::beginJob(){
   addBranch("L1_EG_phi");
   setBranchType(kVectorInt);
   addBranch("L1_EG_Iso");
+  setBranchType(kVectorBool);
+  addBranch("L1_pass_final");
 }
 
 void IIHEModuleL1::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
@@ -35,6 +38,13 @@ void IIHEModuleL1::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         store("L1_EG_phi", eg->phi());
         store("L1_EG_Iso", eg->hwIso());
     }
+  }
+
+  edm::Handle<BXVector<GlobalAlgBlk>> l1algos;
+  iEvent.getByToken(glbalgblk_token_, l1algos);
+
+  for(int i =0; i <512; i++){
+    store("L1_pass_final", l1algos->at(0,0).getAlgoDecisionFinal(i));
   }
 }
 void IIHEModuleL1::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup){}
