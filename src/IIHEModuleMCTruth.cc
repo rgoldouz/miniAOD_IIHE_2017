@@ -44,6 +44,7 @@ void IIHEModuleMCTruth::beginJob(){
   MCPdgIdsToSave.push_back(32) ; // Z'  boson
   MCPdgIdsToSave.push_back(33) ; // Z'' boson
   MCPdgIdsToSave.push_back(34) ; // W'  boson
+  MCPdgIdsToSave.push_back(1000016) ; // tau-sneutrino 
   addToMCTruthWhitelist(MCPdgIdsToSave) ;
   addBranch("mc_n", kUInt) ;
   addBranch("mc_weight", kFloat) ;
