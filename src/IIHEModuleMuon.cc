@@ -217,7 +217,7 @@ void IIHEModuleMuon::beginJob(){
   if(storeImprovedMuonBestTrackMuons_ )  improvedMuonBestTrackWrapper_->addBranches(analysis) ;
   
   // Muon type block
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("mu_isGlobalMuon"      ) ;
   addBranch("mu_isStandAloneMuon"  ) ;
   addBranch("mu_isTrackerMuon"     ) ;

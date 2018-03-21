@@ -26,8 +26,8 @@ void IIHEModuleVertex::beginJob(){
   addBranch("pv_z") ;
   addBranch("pv_ndof") ;
   addBranch("pv_normalizedChi2") ;
-  addBranch("pv_isValid", kVectorBool) ;
-  addBranch("pv_isFake", kVectorBool) ;
+  addBranch("pv_isValid", kVectorInt) ;
+  addBranch("pv_isFake", kVectorInt) ;
 }
 
 // ------------ method called to for each event  ------------

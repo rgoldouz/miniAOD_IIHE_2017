@@ -52,7 +52,7 @@ void IIHEModuleJet::beginJob(){
   addBranch("jet_CvsL");
   addBranch("jet_CvsB");
   addBranch("jet_MVA2BJets");
-  setBranchType(kVectorBool);
+  setBranchType(kVectorInt);
   addBranch("jet_isJetIDLoose");
   addBranch("jet_isJetIDTight");
   addBranch("jet_isJetIDTightLepVeto");
@@ -103,7 +103,7 @@ void IIHEModuleJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   const string vup = "up";
   const string vdown = "down";
 
-  store("jet_n", (unsigned int) pfJetHandle_ -> size() );
+
   for ( unsigned int i = 0; i <pfJetHandle_->size(); ++i) {
     Ptr<pat::Jet> pfjet = pfJetHandle_->ptrAt( i );
 

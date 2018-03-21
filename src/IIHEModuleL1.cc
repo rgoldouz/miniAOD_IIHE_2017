@@ -22,7 +22,6 @@ void IIHEModuleL1::beginJob(){
   addBranch("L1_EG_phi");
   setBranchType(kVectorInt);
   addBranch("L1_EG_Iso");
-  setBranchType(kVectorBool);
   addBranch("L1_pass_final");
 }
 

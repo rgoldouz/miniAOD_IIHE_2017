@@ -34,7 +34,7 @@ void IIHEModulePhoton::beginJob(){
   addBranch("ph_energy") ;
   addBranch("ph_mass") ;
   
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("ph_isPFlowPhoton") ;
   addBranch("ph_isStandardPhoton") ;
   addBranch("ph_hasConversionTracks") ;
@@ -80,7 +80,7 @@ void IIHEModulePhoton::beginJob(){
   addBranch("ph_mipIntercept") ;
   
   addBranch("ph_mipNhitCone", kVectorInt) ;
-  addBranch("ph_mipIsHalo", kVectorBool) ;
+  addBranch("ph_mipIsHalo", kVectorInt) ;
   
   setBranchType(kVectorFloat) ;
   addBranch("ph_ecalRecHitSumEtConeDR04") ;
@@ -143,7 +143,7 @@ void IIHEModulePhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   edm::Handle<edm::View<pat::Photon> > photonCollection_;
   iEvent.getByToken( photonCollectionToken_, photonCollection_) ;
 
-  store("ph_n", (unsigned int) photonCollection_->size()) ;
+  unsigned int ph_n = 0 ;
   for( unsigned int i = 0 ; i < photonCollection_->size() ; i++ ) {
     Ptr<pat::Photon> phiter = photonCollection_->ptrAt( i );
     if(phiter->pt() < ETThreshold_) continue ;
@@ -245,7 +245,9 @@ void IIHEModulePhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& 
       store("ph_mc_index" ,    -1) ;
       store("ph_mc_ERatio", 999.0) ;
     }
+    ph_n++ ;
   }
+  store("ph_n", ph_n ) ;
 }
 
 void IIHEModulePhoton::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup){}

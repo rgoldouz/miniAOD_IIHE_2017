@@ -80,7 +80,7 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsfCalibrated_dr03HcalDepth1TowerSumEt") ;
   addBranch("gsfCalibrated_ooEmooP") ;
   addBranch("gsfCalibrated_eSuperClusterOverP") ;
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("gsfCalibrated_Loose");
   addBranch("gsfCalibrated_Medium");
   addBranch("gsfCalibrated_Tight");
@@ -126,7 +126,7 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsf_dr03HcalDepth2TowerSumEt") ;
   addBranch("gsf_charge", kVectorInt) ;
   addBranch("gsf_sigmaIetaIeta") ;
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("gsf_ecaldrivenSeed"   ) ;
   addBranch("gsf_trackerdrivenSeed") ;
   addBranch("gsf_isEB") ;
@@ -219,7 +219,7 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsf_sc_seed_ieta", kVectorInt) ;
   addBranch("gsf_sc_seed_iphi", kVectorInt) ;
 
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("gsf_sc_seed_kHasSwitchToGain6") ;
   addBranch("gsf_sc_seed_kHasSwitchToGain1") ;
 
@@ -253,12 +253,12 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsf_sc_lazyTools_BasicClusterSeedTime") ;
 
 
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("gsf_isHeepV7");
 
 
   // Saturation information
-  addBranch("EHits_isSaturated", kBool) ;
+  addBranch("EHits_isSaturated", kInt) ;
   setBranchType(kVectorInt) ;
   addBranch("EBHits_rawId"   ) ;
   addBranch("EBHits_iRechit" ) ;
@@ -267,7 +267,7 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("EBHits_iphi"    ) ;
   addBranch("EBHits_RecoFlag") ;
 
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("EBHits_kSaturated"           ) ;
   addBranch("EBHits_kLeadingEdgeRecovered") ;
   addBranch("EBHits_kNeighboursRecovered" ) ;
@@ -282,7 +282,7 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("EEHits_RecoFlag") ;
   addBranch("gsf_VIDMVAVCategories") ;
 
-  setBranchType(kVectorBool) ;
+  setBranchType(kVectorInt) ;
   addBranch("EEHits_kSaturated"           ) ;
   addBranch("EEHits_kLeadingEdgeRecovered") ;
   addBranch("EEHits_kNeighboursRecovered" ) ;
@@ -614,6 +614,9 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_isHeepV7", isHeep);
 
     Ptr<pat::Electron> gsfiterCalibrated = calibratedElectronCollection_->ptrAt( i );
+
+
+
       store("gsfCalibrated_energy"                     , gsfiterCalibrated->energy()                        ) ;
       store("gsfCalibrated_p"                          , gsfiterCalibrated->p()                             ) ;
       store("gsfCalibrated_pt"                         , gsfiterCalibrated->pt()                            ) ;
