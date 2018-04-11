@@ -3,7 +3,7 @@
 
 #include "UserCode/IIHETree/interface/IIHEModule.h"
 #include "DataFormats/PatCandidates/interface/Tau.h"
-
+#include "RecoTauTag/RecoTau/interface/PFRecoTauClusterVariables.h"
 // class decleration
 class IIHEModuleTau : public IIHEModule {
  public:
@@ -31,5 +31,6 @@ class IIHEModuleTau : public IIHEModule {
   edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_ ;
   edm::InputTag           primaryVertexLabel_ ;
   float ETThreshold_ ;
+ TauIdMVAAuxiliaries clusterVariables_;
 };
 #endif
