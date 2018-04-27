@@ -41,8 +41,8 @@ void IIHEModuleVertex::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     store("pv_x"             , pvIt->x()                ) ;
     store("pv_y"             , pvIt->y()                ) ;   
     store("pv_z"             , pvIt->z()                ) ;  
-    store("pv_isValid"       , pvIt->isValid()          ) ;
-    store("pv_isValid"       , pvIt->isFake()          ) ;
+    store("pv_isValid"       , int(pvIt->isValid())          ) ;
+    store("pv_isValid"       , int(pvIt->isFake())          ) ;
     store("pv_ndof"          , pvIt->ndof()        ) ;
     store("pv_normalizedChi2", pvIt->normalizedChi2()   ) ;
   }

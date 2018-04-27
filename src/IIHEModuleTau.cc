@@ -162,7 +162,7 @@ void IIHEModuleTau::beginJob(){
 	addBranch("tau_decayMode");
 	addBranch("tau_charge");
 
-	setBranchType(kVectorBool);
+	setBranchType(kVectorInt);
 	addBranch("tau_isPFTau");
 	addBranch("tau_hasSecondaryVertex");
 	addBranch("tau_leadChargedHadrAvailable");
@@ -386,8 +386,8 @@ void IIHEModuleTau::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 		store("tau_decayMode"         , tauni->decayMode()) ;
 		store("tau_charge"            , tauni->charge()) ;
-		store("tau_isPFTau"           , tauni->isPFTau()) ;
-		store("tau_hasSecondaryVertex", tauni->hasSecondaryVertex()) ;
+		store("tau_isPFTau"           , int(tauni->isPFTau())) ;
+		store("tau_hasSecondaryVertex", int(tauni->hasSecondaryVertex())) ;
 
 		store("tau_PFChargedHadIso", tauni->chargedHadronIso());
 		store("tau_PFNeutralHadIso", tauni->neutralHadronIso());
@@ -452,7 +452,7 @@ void IIHEModuleTau::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		store("tau_ip3d", tauni->ip3d());
 		store("tau_ip3d_Sig", tauni->ip3d_Sig());
 
-		store("tau_leadChargedHadrAvailable", leadChargedHadrAvailable);
+		store("tau_leadChargedHadrAvailable", int(leadChargedHadrAvailable));
 		store("tau_decayDistX", decayDistX);
 		store("tau_decayDistY", decayDistY);;
 		store("tau_decayDistZ",  decayDistZ);

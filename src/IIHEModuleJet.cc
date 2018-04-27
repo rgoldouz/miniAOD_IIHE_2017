@@ -161,9 +161,9 @@ void IIHEModuleJet::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       isJetIDTight = (NEMF<0.90 && NumNeutralParticles>10 ) ;
       isJetIDTightLepVeto = false;
     }
-    store("jet_isJetIDLoose"                 ,isJetIDLoose);
-    store("jet_isJetIDTight"                 ,isJetIDTight);
-    store("jet_isJetIDTightLepVeto"          ,isJetIDTightLepVeto);
+    store("jet_isJetIDLoose"                 ,int(isJetIDLoose));
+    store("jet_isJetIDTight"                 ,int(isJetIDTight));
+    store("jet_isJetIDTightLepVeto"          ,int(isJetIDTightLepVeto));
     if (isMC_){
 
 //JetBTagWeight( edm::View<pat::Jet>&b, size_t ijet, const vector<BTagEntry::OperatingPoinconst string &bc_full_syst, const string &udsg_full_syst,const string &bc_full_syst, const string &udsg_full_syst,const string &bc_fast_syst, const string &udsg_fast_syst,bool do_deep_csv, bool do_by_proc, Runs runs)

@@ -373,25 +373,25 @@ void IIHEModuleMuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     if(saveMuon==false) continue ;
 
  
-    store("mu_isGlobalMuon"      , isGlobalMuon              ) ;
-    store("mu_isStandAloneMuon"  , isStandAloneMuon          ) ;
-    store("mu_isTrackerMuon"     , isTrackerMuon             ) ;
-    store("mu_isPFMuon"          , muIt->isPFMuon()          ) ;
-    store("mu_isPFIsolationValid", muIt->isPFIsolationValid()) ;  
-    store("mu_isGoodMuonTMLastStationLoose"        , muon::isGoodMuon(*muIt,muon::TMLastStationLoose  )) ;
-    store("mu_isGoodMuonTMLastStationTight"        , muon::isGoodMuon(*muIt,muon::TMLastStationTight  )) ;
-    store("mu_isGoodMuonTM2DCompatibilityLoose"        , muon::isGoodMuon(*muIt,muon::TM2DCompatibilityLoose  )) ;
-    store("mu_isGoodMuonTM2DCompatibilityTight"        , muon::isGoodMuon(*muIt,muon::TM2DCompatibilityTight  )) ;
-    store("mu_isGoodMuonTMOneStationLoose"        , muon::isGoodMuon(*muIt,muon::TMOneStationLoose  )) ;
-    store("mu_isGoodMuonTMOneStationTight"        , muon::isGoodMuon(*muIt,muon::TMOneStationTight  )) ;
-    store("mu_isGoodMuonTMLastStationOptimizedLowPtLoose"        , muon::isGoodMuon(*muIt,muon::TMLastStationOptimizedLowPtLoose  )) ;
-    store("mu_isGoodMuonTMLastStationOptimizedLowPtTight"        , muon::isGoodMuon(*muIt,muon::TMLastStationOptimizedLowPtTight  )) ;
-    store("mu_isTightMuon"       , muon::isTightMuon(*muIt,*pvCollection_->begin())    ) ;
-    store("mu_isMediumMuon"      , muon::isMediumMuon(*muIt)    ) ;
-    store("mu_isLooseMuon"       , muon::isLooseMuon(*muIt)    ) ;
-    store("mu_isSoftMuon"        , muon::isSoftMuon(*muIt,*pvCollection_->begin())  ) ;
-    store("mu_isHighPtMuon"      , muon::isHighPtMuon(*muIt,*pvCollection_->begin())    ) ;
-    store("mu_isTrackerHighPtMuon"      , muon::isTrackerHighPtMuon(*muIt,*pvCollection_->begin())    ) ;
+    store("mu_isGlobalMuon"      , int(isGlobalMuon)              ) ;
+    store("mu_isStandAloneMuon"  , int(isStandAloneMuon)          ) ;
+    store("mu_isTrackerMuon"     , int(isTrackerMuon)             ) ;
+    store("mu_isPFMuon"          , int(muIt->isPFMuon())          ) ;
+    store("mu_isPFIsolationValid", int(muIt->isPFIsolationValid())) ;  
+    store("mu_isGoodMuonTMLastStationLoose"        , int(muon::isGoodMuon(*muIt,muon::TMLastStationLoose)  )) ;
+    store("mu_isGoodMuonTMLastStationTight"        , int(muon::isGoodMuon(*muIt,muon::TMLastStationTight)  )) ;
+    store("mu_isGoodMuonTM2DCompatibilityLoose"        , int(muon::isGoodMuon(*muIt,muon::TM2DCompatibilityLoose)  )) ;
+    store("mu_isGoodMuonTM2DCompatibilityTight"        , int(muon::isGoodMuon(*muIt,muon::TM2DCompatibilityTight)  )) ;
+    store("mu_isGoodMuonTMOneStationLoose"        , int(muon::isGoodMuon(*muIt,muon::TMOneStationLoose)  )) ;
+    store("mu_isGoodMuonTMOneStationTight"        , int(muon::isGoodMuon(*muIt,muon::TMOneStationTight)  )) ;
+    store("mu_isGoodMuonTMLastStationOptimizedLowPtLoose"        , int(muon::isGoodMuon(*muIt,muon::TMLastStationOptimizedLowPtLoose)  )) ;
+    store("mu_isGoodMuonTMLastStationOptimizedLowPtTight"        , int(muon::isGoodMuon(*muIt,muon::TMLastStationOptimizedLowPtTight)  )) ;
+    store("mu_isTightMuon"       , int(muon::isTightMuon(*muIt,*pvCollection_->begin()))    ) ;
+    store("mu_isMediumMuon"      , int(muon::isMediumMuon(*muIt))    ) ;
+    store("mu_isLooseMuon"       , int(muon::isLooseMuon(*muIt))    ) ;
+    store("mu_isSoftMuon"        , int(muon::isSoftMuon(*muIt,*pvCollection_->begin()))  ) ;
+    store("mu_isHighPtMuon"      , int(muon::isHighPtMuon(*muIt,*pvCollection_->begin()))    ) ;
+    store("mu_isTrackerHighPtMuon"      , int(muon::isTrackerHighPtMuon(*muIt,*pvCollection_->begin()))    ) ;
 
 
 

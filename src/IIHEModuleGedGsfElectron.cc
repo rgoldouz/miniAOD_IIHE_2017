@@ -419,18 +419,18 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_dr03TkSumPtHEEP7"              , (*eleTrkPtIsoHandle_).get(gsfref)        ) ;
     store("gsf_relIso"                        , electronHelper.GetElectronRelIso(electronCollection_->at(i), coneSize::R03, corrType::rhoEA, effAreaType::spring16)) ;
     store("gsf_effArea"                       , EffArea                                  ) ;
-    store("gsf_Loose"                         , electronHelper.isGoodElectron(electronCollection_->at(i),0,25,electronID::electron80XCutBasedL) && abs(gsfiter->superCluster()->eta()) < 2.5);
-    store("gsf_Medium"                        , electronHelper.isGoodElectron(electronCollection_->at(i),0,25,electronID::electron80XCutBasedM) && abs(gsfiter->superCluster()->eta()) < 2.5) ;
-    store("gsf_Tight"                         , electronHelper.isGoodElectron(electronCollection_->at(i),0,25,electronID::electron80XCutBasedT) && abs(gsfiter->superCluster()->eta()) < 2.5);
-    store("gsf_VIDVeto"                       , (*VIDVetoHandle_).get(gsfref)            ) ;  
-    store("gsf_VIDLoose"                      , (*VIDLooseHandle_).get(gsfref)           ) ;
-    store("gsf_VIDMedium"                     , (*VIDMediumHandle_).get(gsfref)          ) ;
-    store("gsf_VIDTight"                      , (*VIDTightHandle_).get(gsfref)           ) ;
-    store("gsf_VIDHEEP7"                      , (*VIDHEEP7Handle_).get(gsfref)           ) ;
-    store("gsf_VIDMVAMedium"                      , (*medium_id_decisions).get(gsfref)          ) ;
-    store("gsf_VIDMVATight"                      , (*tight_id_decisions).get(gsfref)           ) ;
-    store("gsf_VIDMVAValue"                      , (*mvaValues).get(gsfref)           ) ;
-    store("gsf_VIDMVAVCategories"                      , (*mvaCategories).get(gsfref)           ) ;
+    store("gsf_Loose"                         , int(electronHelper.isGoodElectron(electronCollection_->at(i),0,25,electronID::electron80XCutBasedL) && abs(gsfiter->superCluster()->eta()) < 2.5));
+    store("gsf_Medium"                        , int(electronHelper.isGoodElectron(electronCollection_->at(i),0,25,electronID::electron80XCutBasedM) && abs(gsfiter->superCluster()->eta()) < 2.5)) ;
+    store("gsf_Tight"                         , int(electronHelper.isGoodElectron(electronCollection_->at(i),0,25,electronID::electron80XCutBasedT) && abs(gsfiter->superCluster()->eta()) < 2.5));
+    store("gsf_VIDVeto"                       , int((*VIDVetoHandle_).get(gsfref))            ) ;  
+    store("gsf_VIDLoose"                      , int((*VIDLooseHandle_).get(gsfref))           ) ;
+    store("gsf_VIDMedium"                     , int((*VIDMediumHandle_).get(gsfref))          ) ;
+    store("gsf_VIDTight"                      , int((*VIDTightHandle_).get(gsfref))           ) ;
+    store("gsf_VIDHEEP7"                      , int((*VIDHEEP7Handle_).get(gsfref))           ) ;
+    store("gsf_VIDMVAMedium"                  , int((*medium_id_decisions).get(gsfref))          ) ;
+    store("gsf_VIDMVATight"                   , int((*tight_id_decisions).get(gsfref))           ) ;
+    store("gsf_VIDMVAValue"                   , int((*mvaValues).get(gsfref))           ) ;
+    store("gsf_VIDMVAVCategories"             , int((*mvaCategories).get(gsfref))           ) ;
 //    store("gsf_VIDmvaEleIDwp90"               , (*VIDmvaEleIDwp90Handle_).get(gsfref)        ) ;
 //    store("gsf_VIDmvaEleIDwp80"               , (*VIDmvaEleIDwp80Handle_).get(gsfref)        ) ;
     store("gsf_dr03EcalRecHitSumEt"           , gsfiter->dr03EcalRecHitSumEt()           ) ;
@@ -438,10 +438,10 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_dr03HcalDepth2TowerSumEt"      , gsfiter->dr03HcalDepth2TowerSumEt()      ) ;
     store("gsf_charge"                        , gsfiter->charge()                        ) ;
     store("gsf_sigmaIetaIeta"                 , gsfiter->sigmaIetaIeta()                 ) ;
-    store("gsf_ecaldrivenSeed"                , gsfiter->ecalDrivenSeed()                ) ;
-    store("gsf_trackerdrivenSeed"             , gsfiter->trackerDrivenSeed()             ) ;
-    store("gsf_isEB"                          , gsfiter->isEB()                          ) ;
-    store("gsf_isEE"                          , gsfiter->isEE()                          ) ;
+    store("gsf_ecaldrivenSeed"                , int(gsfiter->ecalDrivenSeed())                ) ;
+    store("gsf_trackerdrivenSeed"             , int(gsfiter->trackerDrivenSeed())             ) ;
+    store("gsf_isEB"                          , int(gsfiter->isEB())                          ) ;
+    store("gsf_isEE"                          , int(gsfiter->isEE())                          ) ;
     store("gsf_passConversionVeto"            , gsfiter->passConversionVeto()            ) ;
     store("gsf_deltaEtaSeedClusterTrackAtCalo", gsfiter->deltaEtaSeedClusterTrackAtCalo()) ;
     store("gsf_deltaPhiSeedClusterTrackAtCalo", gsfiter->deltaPhiSeedClusterTrackAtCalo()) ;
@@ -611,7 +611,7 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
       ( ET > 50 && gsfiter->dr03EcalRecHitSumEt() + gsfiter->dr03HcalDepth1TowerSumEt() < 2.5 + 0.03 * (ET-50) + 0.28 * rho)) &&
       (*eleTrkPtIsoHandle_).get(gsfref) < 5) isHeep = true;
 
-    store("gsf_isHeepV7", isHeep);
+    store("gsf_isHeepV7", int(isHeep));
 
     Ptr<pat::Electron> gsfiterCalibrated = calibratedElectronCollection_->ptrAt( i );
 
@@ -627,9 +627,9 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
       store("gsfCalibrated_hcalDepth2OverEcal"         , gsfiterCalibrated->hcalDepth2OverEcal()            ) ;
       store("gsfCalibrated_dr03EcalRecHitSumEt"        , gsfiterCalibrated->dr03EcalRecHitSumEt()           ) ;
       store("gsfCalibrated_dr03HcalDepth1TowerSumEt"   , gsfiterCalibrated->dr03HcalDepth1TowerSumEt()      ) ;
-      store("gsfCalibrated_Loose"                      , electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedL) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5);
-      store("gsfCalibrated_Medium"                     , electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedM) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5) ;
-      store("gsfCalibrated_Tight"                      , electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedT) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5);
+      store("gsfCalibrated_Loose"                      , int(electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedL) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5));
+      store("gsfCalibrated_Medium"                     , int(electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedM) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5)) ;
+      store("gsfCalibrated_Tight"                      , int(electronHelper.isGoodElectron(calibratedElectronCollection_->at(i),0,25,electronID::electron80XCutBasedT) && abs(gsfiterCalibrated->superCluster()->eta()) < 2.5));
       store("gsfCalibrated_ooEmooP"                       ,fabs(1.0/gsfiterCalibrated->ecalEnergy() - gsfiterCalibrated->eSuperClusterOverP()/gsfiterCalibrated->ecalEnergy() )) ;
       store("gsfCalibrated_eSuperClusterOverP"            ,gsfiterCalibrated->eSuperClusterOverP()) ;
 
@@ -656,7 +656,7 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
         (( ETCalibrated < 50 && gsfiterCalibrated->dr03EcalRecHitSumEt() + gsfiterCalibrated->dr03HcalDepth1TowerSumEt() < 2.5 + 0.28 * rho) ||
         ( ETCalibrated > 50 && gsfiterCalibrated->dr03EcalRecHitSumEt() + gsfiterCalibrated->dr03HcalDepth1TowerSumEt() < 2.5 + 0.03 * (ETCalibrated-50) + 0.28 * rho)) &&
         (*eleTrkPtIsoHandle_).get(gsfref) < 5) isHeep80 = true;
-      store("gsfCalibrated_isHeepV7", isHeep80);
+      store("gsfCalibrated_isHeepV7", int(isHeep80));
 
  }
   store("gsf_n", gsf_n) ;
@@ -701,7 +701,7 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("EEHits_kNeighboursRecovered" , (*EEIt).checkFlag(EcalRecHit::kNeighboursRecovered )) ;
     store("EEHits_kWeird"               , (*EEIt).checkFlag(EcalRecHit::kWeird               )) ;
   }
-  store("EHits_isSaturated", isSaturated);
+  store("EHits_isSaturated", int(isSaturated));
 
 }
 
