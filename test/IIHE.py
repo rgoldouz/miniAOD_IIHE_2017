@@ -63,6 +63,8 @@ if options.DataProcessing == "mc2017":
   globalTag = "94X_mc2017_realistic_v10"
 if options.DataProcessing == "data2017":
   globalTag = "92X_dataRun2_Jun23ReReco_PixelCommissioning"
+if options.DataProcessing == "dataLegacy2016":
+  globalTag = "80X_dataRun2_2016LegacyRepro_v4"
 ##########################################################################################
 #                                  Start the sequences                                   #
 ##########################################################################################
@@ -99,7 +101,7 @@ process.source = cms.Source("PoolSource",
 #process.source.fileNames.append( "file:03Feb2017data.root" )
 #process.source.fileNames.append( "file:TW_80_miniAOD.root" )
 #process.source.fileNames.append( "file:2017data.root" )
-process.source.fileNames.append( "file:MC2017_tW.root" )
+process.source.fileNames.append( "file:legacyData.root" )
 ###
 filename_out = "outfile.root"
 if options.DataFormat == "mc" and not options.grid:
@@ -233,13 +235,24 @@ process.IIHEAnalysis.includeAutoAcceptEventModule                = cms.untracked
 #    "PoolOutputModule",
 #    fileName = cms.untracked.string("EDM.root")
 #    )
-process.p1 = cms.Path(
-    process.rerunMvaIsolationSequence *
-    process.NewTauIDsEmbedded *
-    process.calibratedPatElectrons *
-    process.egmGsfElectronIDSequence * 
-    process.IIHEAnalysis
-    )
 
+
+if options.DataProcessing == "dataLegacy2016":
+    process.IIHEAnalysis.calibratedElectronCollection    = cms.InputTag("slimmedElectrons")
+    process.IIHEAnalysis.triggerObjectStandAloneCollection= cms.InputTag("selectedPatTrigger")
+    process.p1 = cms.Path(
+        process.rerunMvaIsolationSequence *
+        process.NewTauIDsEmbedded *
+        process.egmGsfElectronIDSequence * 
+        process.IIHEAnalysis
+        )
+else:
+    process.p1 = cms.Path(
+        process.rerunMvaIsolationSequence *
+        process.NewTauIDsEmbedded *
+        process.calibratedPatElectrons *
+        process.egmGsfElectronIDSequence *
+        process.IIHEAnalysis
+        )
 #process.outpath = cms.EndPath(process.out)
 
