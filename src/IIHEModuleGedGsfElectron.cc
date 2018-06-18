@@ -144,7 +144,6 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("gsf_VIDMVATight");
 
   setBranchType(kVectorFloat) ;
-  addBranch("gsf_VIDMVAValue");
   addBranch("gsf_deltaEtaSeedClusterTrackAtCalo") ;
   addBranch("gsf_deltaPhiSeedClusterTrackAtCalo") ;
   addBranch("gsf_ecalEnergy") ;
@@ -280,7 +279,6 @@ void IIHEModuleGedGsfElectron::beginJob(){
   addBranch("EEHits_ieta"    ) ;
   addBranch("EEHits_iphi"    ) ;
   addBranch("EEHits_RecoFlag") ;
-  addBranch("gsf_VIDMVAVCategories") ;
 
   setBranchType(kVectorInt) ;
   addBranch("EEHits_kSaturated"           ) ;
@@ -429,10 +427,6 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_VIDHEEP7"                      , int((*VIDHEEP7Handle_).get(gsfref))           ) ;
     store("gsf_VIDMVAMedium"                  , int((*medium_id_decisions).get(gsfref))          ) ;
     store("gsf_VIDMVATight"                   , int((*tight_id_decisions).get(gsfref))           ) ;
-    store("gsf_VIDMVAValue"                   , int((*mvaValues).get(gsfref))           ) ;
-    store("gsf_VIDMVAVCategories"             , int((*mvaCategories).get(gsfref))           ) ;
-//    store("gsf_VIDmvaEleIDwp90"               , (*VIDmvaEleIDwp90Handle_).get(gsfref)        ) ;
-//    store("gsf_VIDmvaEleIDwp80"               , (*VIDmvaEleIDwp80Handle_).get(gsfref)        ) ;
     store("gsf_dr03EcalRecHitSumEt"           , gsfiter->dr03EcalRecHitSumEt()           ) ;
     store("gsf_dr03HcalDepth1TowerSumEt"      , gsfiter->dr03HcalDepth1TowerSumEt()      ) ;
     store("gsf_dr03HcalDepth2TowerSumEt"      , gsfiter->dr03HcalDepth2TowerSumEt()      ) ;
@@ -442,7 +436,7 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_trackerdrivenSeed"             , int(gsfiter->trackerDrivenSeed())             ) ;
     store("gsf_isEB"                          , int(gsfiter->isEB())                          ) ;
     store("gsf_isEE"                          , int(gsfiter->isEE())                          ) ;
-    store("gsf_passConversionVeto"            , gsfiter->passConversionVeto()            ) ;
+    store("gsf_passConversionVeto"            , int(gsfiter->passConversionVeto())            ) ;
     store("gsf_deltaEtaSeedClusterTrackAtCalo", gsfiter->deltaEtaSeedClusterTrackAtCalo()) ;
     store("gsf_deltaPhiSeedClusterTrackAtCalo", gsfiter->deltaPhiSeedClusterTrackAtCalo()) ;
     store("gsf_ecalEnergy"                    , gsfiter->ecalEnergy()                    ) ;
@@ -501,8 +495,8 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("gsf_sc_seed_rawId" , gsfiter->superCluster()->seed()->seed().rawId()   );
     const EcalRecHitCollection *recHits = (gsfiter->isEB()) ? lazytool.getEcalEBRecHitCollection() : lazytool.getEcalEERecHitCollection();
     EcalRecHitCollection::const_iterator seedRecHit = recHits->find(gsfiter->superCluster()->seed()->seed()) ;
-    store("gsf_sc_seed_kHasSwitchToGain6" , seedRecHit->checkFlag(EcalRecHit::kHasSwitchToGain6) ) ;
-    store("gsf_sc_seed_kHasSwitchToGain1" , seedRecHit->checkFlag(EcalRecHit::kHasSwitchToGain1)  ) ;
+    store("gsf_sc_seed_kHasSwitchToGain6" , int(seedRecHit->checkFlag(EcalRecHit::kHasSwitchToGain6)) ) ;
+    store("gsf_sc_seed_kHasSwitchToGain1" , int(seedRecHit->checkFlag(EcalRecHit::kHasSwitchToGain1) ) ) ;
 
 
     const std::vector<std::pair<DetId,float> > & hits= gsfiter->superCluster()->hitsAndFractions();
@@ -676,10 +670,10 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("EBHits_iphi"    , elementId.iphi() ) ;
     store("EBHits_RecoFlag", (*EBIt).recoFlag() ) ;
 
-    store("EBHits_kSaturated"           , (*EBIt).checkFlag(EcalRecHit::kSaturated           )) ;
-    store("EBHits_kLeadingEdgeRecovered", (*EBIt).checkFlag(EcalRecHit::kLeadingEdgeRecovered)) ;
-    store("EBHits_kNeighboursRecovered" , (*EBIt).checkFlag(EcalRecHit::kNeighboursRecovered )) ;
-    store("EBHits_kWeird"               , (*EBIt).checkFlag(EcalRecHit::kWeird               )) ;
+    store("EBHits_kSaturated"           , int((*EBIt).checkFlag(EcalRecHit::kSaturated           ))) ;
+    store("EBHits_kLeadingEdgeRecovered", int((*EBIt).checkFlag(EcalRecHit::kLeadingEdgeRecovered))) ;
+    store("EBHits_kNeighboursRecovered" , int((*EBIt).checkFlag(EcalRecHit::kNeighboursRecovered ))) ;
+    store("EBHits_kWeird"               , int((*EBIt).checkFlag(EcalRecHit::kWeird               ))) ;
   }
 
 
@@ -696,10 +690,10 @@ void IIHEModuleGedGsfElectron::analyze(const edm::Event& iEvent, const edm::Even
     store("EEHits_iphi"    , elementId.iphi() ) ;
     store("EEHits_RecoFlag", (*EEIt).recoFlag() ) ;
 
-    store("EEHits_kSaturated"           , (*EEIt).checkFlag(EcalRecHit::kSaturated           )) ;
-    store("EEHits_kLeadingEdgeRecovered", (*EEIt).checkFlag(EcalRecHit::kLeadingEdgeRecovered)) ;
-    store("EEHits_kNeighboursRecovered" , (*EEIt).checkFlag(EcalRecHit::kNeighboursRecovered )) ;
-    store("EEHits_kWeird"               , (*EEIt).checkFlag(EcalRecHit::kWeird               )) ;
+    store("EEHits_kSaturated"           , int( (*EEIt).checkFlag(EcalRecHit::kSaturated           ))) ;
+    store("EEHits_kLeadingEdgeRecovered", int( (*EEIt).checkFlag(EcalRecHit::kLeadingEdgeRecovered))) ;
+    store("EEHits_kNeighboursRecovered" , int( (*EEIt).checkFlag(EcalRecHit::kNeighboursRecovered ))) ;
+    store("EEHits_kWeird"               , int( (*EEIt).checkFlag(EcalRecHit::kWeird               ))) ;
   }
   store("EHits_isSaturated", int(isSaturated));
 
