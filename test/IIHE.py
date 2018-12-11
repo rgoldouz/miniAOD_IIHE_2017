@@ -100,8 +100,10 @@ process.source = cms.Source("PoolSource",
 #process.source.fileNames.append( path )
 #process.source.fileNames.append( "file:03Feb2017data.root" )
 #process.source.fileNames.append( "file:TW_80_miniAOD.root" )
-process.source.fileNames.append( "file:2017data.root" )
+#process.source.fileNames.append( "file:2017data.root" )
 #process.source.fileNames.append( "file:legacyData.root" )
+#process.source.fileNames.append( "file:R_numEvent2.root" )
+process.source.fileNames.append( "file:MC2017_tW.root" )
 ###
 filename_out = "outfile.root"
 if options.DataFormat == "mc" and not options.grid:
